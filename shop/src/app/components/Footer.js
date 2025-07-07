@@ -5,9 +5,9 @@ export default function Footer() {
   return (
     <footer className="bg-gray-800 text-white py-8 mt-auto">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-right">
           {/* About */}
-          <div>
+          <div className="md:border-l md:border-gray-700 md:pl-6">
             <h3 className="text-lg font-semibold mb-4">درباره ما</h3>
             <p className="text-gray-300">
               فروشگاه آنلاین ما با ارائه بهترین محصولات با کیفیت بالا در خدمت شماست.
@@ -15,7 +15,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="md:border-l md:border-gray-700 md:pl-6">
             <h3 className="text-lg font-semibold mb-4">لینک های سریع</h3>
             <ul className="space-y-2">
               <li><a href="/" className="text-gray-300 hover:text-white">صفحه اصلی</a></li>
@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="md:border-l md:border-gray-700 md:pl-6">
             <h3 className="text-lg font-semibold mb-4">تماس با ما</h3>
             <address className="text-gray-300 not-italic">
               <p>تهران، خیابان نمونه</p>
@@ -36,9 +36,9 @@ export default function Footer() {
           </div>
 
           {/* Social Media */}
-          <div>
+          <div className="md:border-l md:border-gray-700 md:pl-6">
             <h3 className="text-lg font-semibold mb-4">شبکه های اجتماعی</h3>
-            <div className="flex gap-4">
+            <div className="flex justify-center md:justify-start gap-4">
               <a href="#" className="text-gray-300 hover:text-white">
                 <FaInstagram className="text-2xl" />
               </a>
