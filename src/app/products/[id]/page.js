@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
@@ -8,42 +7,40 @@ import { FaMinus, FaPlus, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import RelatedProducts from '../../components/RelatedProducts';
 
-async function getProducts() {
-  try {
-    const res = await fetch('/api/products');
-    if (!res.ok) throw new Error('Failed to fetch products');
-    return res.json();
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-}
-
 export default function ProductDetailPage() {
   const { id } = useParams();
   const productId = Number(id);
-  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProduct = async () => {
       try {
-        const data = await getProducts();
-        setProducts(data);
+        const response = await fetch(`/api/products/${productId}`);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          if (errorText.startsWith('<!DOCTYPE')) {
+            throw new Error('API returned HTML error page');
+          }
+          throw new Error(errorText || 'Failed to fetch product');
+        }
+        
+        const data = await response.json();
+        setProduct(data);
       } catch (err) {
+        console.error('Fetch error:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
-
-  const product = products.find((p) => p.id === productId);
+    fetchProduct();
+  }, [productId]);
 
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
   const handleIncrement = () => setQuantity((prev) => prev + 1);
@@ -182,10 +179,8 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Only render RelatedProducts if it exists */}
-      {RelatedProducts && (
-        <RelatedProducts products={products} currentProductId={product.id} />
-      )}
+      {/* Related Products */}
+      <RelatedProducts currentProductId={product.id} category={product.category} />
     </div>
   );
 }

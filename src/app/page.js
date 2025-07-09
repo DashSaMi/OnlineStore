@@ -15,7 +15,7 @@ export default function Home() {
       </section>
 
       {/* Best Selling Products Section */}
-      <BestSellingProducts  />
+      <BestSellingProducts />
 
       {/* Features Section (optional) */}
       <section className="py-16 px-4 bg-white">
