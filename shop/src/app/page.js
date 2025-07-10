@@ -1,4 +1,5 @@
 // app/page.js
+import Link from 'next/link'
 import BestSellingProducts from './components/BestSellingProducts'
 import Image from "next/image";
 

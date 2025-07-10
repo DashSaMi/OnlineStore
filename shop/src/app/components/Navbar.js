@@ -2,9 +2,11 @@
 import Link from 'next/link';
 import { FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
 import { useState } from 'react';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalItems } = useCart();
 
   return (
     <header className="bg-white shadow-sm py-4 px-6 sticky top-0 z-50">
@@ -41,10 +43,18 @@ export default function Navbar() {
           {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
 
-        {/* Shopping Cart (always visible) */}
+        {/* Shopping Cart with item count */}
         <div className="flex items-center">
-          <Link href="/cart" className="p-2 text-gray-700 hover:text-blue-600">
+          <Link 
+            href="/cart" 
+            className="p-2 text-gray-700 hover:text-blue-600 relative"
+          >
             <FaShoppingCart className="text-xl" />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
             <span className="sr-only">سبد خرید</span>
           </Link>
         </div>
