@@ -1,9 +1,10 @@
-import { connectToDatabase } from '../../lib/mongodb';
+// app/api/products/route.js
+import { getDb } from '../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 export async function GET(request) {
   try {
-    const { db } = await connectToDatabase();
+    const db = await getDb();
     
     const { searchParams } = new URL(request.url);
     const bestSellers = searchParams.get('bestSellers');
@@ -25,4 +26,4 @@ export async function GET(request) {
       { status: 500 }
     );
   }
-} 
+}

@@ -1,4 +1,5 @@
- import { Schema, model, models } from 'mongoose';
+// models/product/Product.js
+import { Schema, model, models } from 'mongoose';
 
 const productSchema = new Schema({
     id: {
@@ -44,8 +45,8 @@ const productSchema = new Schema({
         type: String,
         required: [true, 'توضیحات محصول الزامی است']
     },
-    category: {
-        type: String,
+    categories: {  // Changed from 'category' to 'categories' to match your query
+        type: [String],
         required: [true, 'دسته‌بندی محصول الزامی است']
     },
     stock: {
@@ -74,16 +75,12 @@ const productSchema = new Schema({
     }
 });
 
-// Add a pre-save hook to generate numeric ID if not provided
 productSchema.pre('save', async function(next) {
     if (!this.id) {
-        // Find the highest id and increment by 1
         const highestProduct = await this.constructor.findOne().sort('-id');
         this.id = highestProduct ? highestProduct.id + 1 : 1;
     }
     next();
 });
 
-const Product = models.Product || model('Product', productSchema);
-
-export default Product;
+export default models.Product || model('Product', productSchema);

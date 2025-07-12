@@ -12,28 +12,25 @@ export default function RelatedProducts({ currentProductId, category }) {
   useEffect(() => {
     const fetchRelatedProducts = async () => {
       try {
+        // Add error handling for missing category
         if (!category) {
-          setRelatedProducts([]);
           setLoading(false);
           return;
         }
 
-        const url = new URL('/api/products/related', window.location.origin);
-        url.searchParams.append('currentProductId', currentProductId);
-        url.searchParams.append('category', category);
-
-        const response = await fetch(url.toString());
+        const response = await fetch(
+          `/api/products/related?category=${encodeURIComponent(category)}&exclude=${currentProductId}`
+        );
         
         if (!response.ok) {
-          throw new Error('Failed to fetch related products');
+          throw new Error(`Failed to fetch related products: ${response.status}`);
         }
         
         const data = await response.json();
-        setRelatedProducts(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error('Error fetching related products:', error);
-        setError(error.message);
-        setRelatedProducts([]);
+        setRelatedProducts(data);
+      } catch (err) {
+        console.error('Error fetching related products:', err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -44,18 +41,20 @@ export default function RelatedProducts({ currentProductId, category }) {
 
   if (loading) return <div className="text-center py-4">در حال بارگذاری...</div>;
   if (error) return <div className="text-center py-4 text-red-500">خطا: {error}</div>;
-  if (!Array.isArray(relatedProducts) || relatedProducts.length === 0) return null;
+  if (!relatedProducts?.length) return null;
 
   return (
     <div className="mt-12">
       <h2 className="text-2xl font-bold mb-6">محصولات مشابه</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {relatedProducts.map((product) => (
-          <div key={product._id}>
-            <Link href={`/products/${product._id}`} passHref>
-              <ProductCard product={product} />
-            </Link>
-          </div>
+          <Link 
+            key={product._id} 
+            href={`/products/${product._id}`}
+            className="hover:scale-[1.02] transition-transform block"
+          >
+            <ProductCard product={product} />
+          </Link>
         ))}
       </div>
     </div>

@@ -1,7 +1,12 @@
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options = {
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 10000,
+  maxPoolSize: 10,
+};
 
 let client;
 let clientPromise;
@@ -21,9 +26,17 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-// Export as named export
+// Add this function
 export async function connectToDatabase() {
   const client = await clientPromise;
   const db = client.db(process.env.MONGODB_DB_NAME);
   return { client, db };
 }
+
+// Keep existing exports
+export async function getDb() {
+  const client = await clientPromise;
+  return client.db(process.env.MONGODB_DB_NAME);
+}
+
+export default clientPromise;

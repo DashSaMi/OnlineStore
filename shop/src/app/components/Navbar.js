@@ -1,83 +1,86 @@
-'use client'
+// components/Navbar.js
+'use client';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
-import { useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { FaShoppingCart, FaUser, FaSignOutAlt, FaHome, FaBoxOpen } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { totalItems } = useCart();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleSignIn = async () => {
+    const result = await signIn('google', { 
+      redirect: false,
+      callbackUrl: '/' 
+    });
+    if (result?.url) {
+      router.push(result.url);
+    }
+  };
 
   return (
     <header className="bg-white shadow-sm py-4 px-6 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo and title */}
-        <div className="flex items-center gap-4">
-          <Link href="/" className="text-2xl font-bold text-gray-800">
-            فروشگاه
-          </Link>
-          <div className="w-10 h-10 bg-blue-500 rounded"></div>
-        </div>
+        <Link href="/" className="text-2xl font-bold text-gray-800">
+          فروشگاه
+        </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-8">
-          <Link href="/" className="text-gray-700 hover:text-blue-600">
-            صفحه اصلی
-          </Link>
-          <Link href="/products" className="text-gray-700 hover:text-blue-600">
-            محصولات
-          </Link>
-          <Link href="/about" className="text-gray-700 hover:text-blue-600">
-            درباره ما
-          </Link>
-          <Link href="/contact" className="text-gray-700 hover:text-blue-600">
-            تماس با ما
-          </Link>
-        </nav>
+        <div className="flex items-center gap-6">
+          {/* Main Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-1 text-gray-700 hover:text-blue-600">
+              <FaHome className="text-lg" />
+              <span>خانه</span>
+            </Link>
+            <Link href="/products" className="flex items-center gap-1 text-gray-700 hover:text-blue-600">
+              <FaBoxOpen className="text-lg" />
+              <span>محصولات</span>
+            </Link>
+          </nav>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-gray-700 focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </button>
-
-        {/* Shopping Cart with item count */}
-        <div className="flex items-center">
-          <Link 
-            href="/cart" 
-            className="p-2 text-gray-700 hover:text-blue-600 relative"
-          >
-            <FaShoppingCart className="text-xl" />
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {totalItems}
-              </span>
+          {/* User Actions */}
+          <div className="flex items-center gap-4">
+            {session ? (
+              <>
+                <Link 
+                  href="/cart" 
+                  className="p-2 text-gray-700 hover:text-blue-600 relative"
+                >
+                  <FaShoppingCart className="text-xl" />
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    0 {/* Replace with actual cart count */}
+                  </span>
+                </Link>
+                
+                <div className="flex items-center gap-2">
+                  {session.user?.image && (
+                    <img
+                      src={session.user.image}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
+                </div>
+                
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="p-2 text-gray-700 hover:text-red-600"
+                >
+                  <FaSignOutAlt className="text-xl" />
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleSignIn}
+                className="p-2 text-gray-700 hover:text-blue-600"
+              >
+                <FaUser className="text-xl" />
+              </button>
             )}
-            <span className="sr-only">سبد خرید</span>
-          </Link>
-        </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg py-4 px-6">
-            <nav className="flex flex-col gap-4">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 py-2" onClick={() => setIsOpen(false)}>
-                صفحه اصلی
-              </Link>
-              <Link href="/products" className="text-gray-700 hover:text-blue-600 py-2" onClick={() => setIsOpen(false)}>
-                محصولات
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-blue-600 py-2" onClick={() => setIsOpen(false)}>
-                درباره ما
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-blue-600 py-2" onClick={() => setIsOpen(false)}>
-                تماس با ما
-              </Link>
-            </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );

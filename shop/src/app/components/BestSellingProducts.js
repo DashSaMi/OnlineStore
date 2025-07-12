@@ -1,37 +1,40 @@
-'use client'
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import ProductCard from './ProductCard'
+// components/BestSellingProducts.js
+'use client';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import ProductCard from './ProductCard';
+import { useCart } from '../context/CartContext';
 
 export default function BestSellingProducts() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products?bestSellers=true')
+        const response = await fetch('/api/products?bestSellers=true');
         
         if (!response.ok) {
-          throw new Error('Failed to fetch products')
+          throw new Error('Failed to fetch products');
         }
         
-        const data = await response.json()
-        setProducts(data)
+        const data = await response.json();
+        setProducts(data);
       } catch (err) {
-        console.error('Fetch error:', err)
-        setError(err.message)
+        console.error('Fetch error:', err);
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
-  if (loading) return <div className="text-center py-12">در حال بارگذاری...</div>
-  if (error) return <div className="text-center py-12 text-red-500">خطا: {error}</div>
+  if (loading) return <div className="text-center py-12">در حال بارگذاری...</div>;
+  if (error) return <div className="text-center py-12 text-red-500">خطا: {error}</div>;
   
   return (
     <section className="py-12 px-4 bg-gray-50">
@@ -44,13 +47,11 @@ export default function BestSellingProducts() {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <Link 
-                key={product._id} 
-                href={`/products/${product._id}`}
-                className="hover:scale-[1.02] transition-transform"
-              >
-                <ProductCard product={product} />
-              </Link>
+              <div key={product._id} className="hover:scale-[1.02] transition-transform">
+                <Link href={`/products/${product._id}`}>
+                  <ProductCard product={product} />
+                </Link>
+              </div>
             ))}
           </div>
         ) : (
@@ -63,5 +64,5 @@ export default function BestSellingProducts() {
         )}
       </div>
     </section>
-  )
+  );
 }

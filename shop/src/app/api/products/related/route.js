@@ -1,37 +1,36 @@
 // app/api/products/related/route.js
-import { connectToDatabase } from '../../../lib/mongodb';
-import { ObjectId } from 'mongodb';
+import { connectToDB } from '@/lib/mongoose';
+import Product from '@/models/product/product';
 
 export async function GET(request) {
   try {
-    const { db } = await connectToDatabase();
-    const { searchParams } = new URL(request.url);
+    await connectToDB();
     
-    const currentProductId = searchParams.get('currentProductId');
-    const category = searchParams.get('category');
+    const { searchParams } = new URL(request.url);
+    const category = decodeURIComponent(searchParams.get('category'));
+    const exclude = searchParams.get('exclude');
 
-    if (!ObjectId.isValid(currentProductId)) {
-      return Response.json({ message: 'Invalid product ID' }, { status: 400 });
+    if (!category) {
+      return Response.json([]);
     }
 
-    const products = await db.collection('products')
-      .find({
-        _id: { $ne: new ObjectId(currentProductId) },
-        categories: category
-      })
-      .limit(4)
-      .toArray();
+    const relatedProducts = await Product.find({
+      categories: { $in: [category] }, // Using $in to search in array
+      _id: { $ne: exclude }
+    })
+    .select('-__v')
+    .limit(4)
+    .lean();
 
-    const serializedProducts = products.map(product => ({
-      ...product,
-      _id: product._id.toString()
-    }));
-    
-    return Response.json(serializedProducts);
+    return Response.json(relatedProducts);
   } catch (error) {
-    return Response.json({ 
-      message: 'Server error', 
-      error: error.message 
-    }, { status: 500 });
+    console.error('Error:', error);
+    return Response.json(
+      { 
+        error: 'Failed to fetch related products',
+        message: error.message
+      },
+      { status: 500 }
+    );
   }
 }

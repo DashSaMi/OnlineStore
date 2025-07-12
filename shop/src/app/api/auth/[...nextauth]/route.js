@@ -1,0 +1,24 @@
+// app/api/auth/[...nextauth]/route.js
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  callbacks: {
+    async session({ session, token }) {
+      session.user.image = token.picture; // Ensure image is included
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/', // Redirect to home after sign-in
+  },
+};
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

@@ -1,5 +1,5 @@
 // app/api/products/filter/route.js
-import { connectToDatabase } from '../../../lib/mongodb'
+import { connectToDatabase } from '../../../../lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 export async function GET(request) {
