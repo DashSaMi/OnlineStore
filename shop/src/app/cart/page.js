@@ -1,4 +1,3 @@
-// app/cart/page.js
 'use client'
 import { useCart } from '../context/CartContext'
 import Link from 'next/link'
@@ -25,6 +24,20 @@ export default function CartPage() {
     }).format(price)
   }
 
+  const handleIncrement = (productId) => {
+    const product = cart.find(item => item._id === productId)
+    if (product) {
+      updateQuantity(productId, product.quantity + 1)
+    }
+  }
+
+  const handleDecrement = (productId) => {
+    const product = cart.find(item => item._id === productId)
+    if (product) {
+      updateQuantity(productId, product.quantity - 1)
+    }
+  }
+
   if (cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
@@ -47,7 +60,7 @@ export default function CartPage() {
         <div className="lg:col-span-2">
           {cart.map((item) => (
             <div
-              key={item.id}
+              key={item._id}
               className="bg-white rounded-lg shadow-md p-4 mb-4 flex flex-col sm:flex-row gap-4"
             >
               <div className="relative w-full sm:w-32 h-32">
@@ -73,20 +86,21 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center gap-2 mt-4">
                   <button
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    onClick={() => handleDecrement(item._id)}
                     className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                    disabled={item.quantity <= 1}
                   >
                     <FaMinus size={12} />
                   </button>
                   <span className="w-8 text-center">{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    onClick={() => handleIncrement(item._id)}
                     className="p-1 bg-gray-200 rounded hover:bg-gray-300"
                   >
                     <FaPlus size={12} />
                   </button>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item._id)}
                     className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 ml-auto"
                   >
                     <FaTrash />

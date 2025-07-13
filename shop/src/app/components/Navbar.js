@@ -1,13 +1,14 @@
-// components/Navbar.js
 'use client';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { FaShoppingCart, FaUser, FaSignOutAlt, FaHome, FaBoxOpen } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { useCart } from '../context/CartContext'; // Added import
 
 export default function Navbar() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { totalItems } = useCart(); // Moved inside component
 
   const handleSignIn = async () => {
     const result = await signIn('google', { 
@@ -48,9 +49,11 @@ export default function Navbar() {
                   className="p-2 text-gray-700 hover:text-blue-600 relative"
                 >
                   <FaShoppingCart className="text-xl" />
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    0 {/* Replace with actual cart count */}
-                  </span>
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {totalItems}
+                    </span>
+                  )}
                 </Link>
                 
                 <div className="flex items-center gap-2">

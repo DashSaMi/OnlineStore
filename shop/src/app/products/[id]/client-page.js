@@ -5,25 +5,27 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaMinus, FaPlus, FaShoppingCart } from 'react-icons/fa';
-import { useCart } from '../../context/CartContext'; // Fixed path (removed one ../)
-import RelatedProducts from '../../components/RelatedProducts'; // Fixed path (removed one ../)
+import { useCart } from '../../context/CartContext';
 import { useSession } from 'next-auth/react';
+import RelatedProducts from '../../components/RelatedProducts';
 
-
-export default function ProductDetailPage() {
-  const { id } = useParams();
+export default function ProductDetailPage({ id: initialId }) {
+  const params = useParams();
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
+  // Use the id from props if available, otherwise from params
+  const productId = initialId || params.id;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(`/api/products/${productId}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch product');
@@ -40,28 +42,19 @@ export default function ProductDetailPage() {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [productId]);
 
-  const handleCategoryClick = (category) => {
-    router.push(`/products/category/${encodeURIComponent(category)}`);
-  };
-
-  const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
-  const handleIncrement = () => setQuantity((prev) => prev + 1);
-  
+  // Quantity handlers
+  const handleDecrement = () => setQuantity(prev => Math.max(1, prev - 1));
+  const handleIncrement = () => setQuantity(prev => prev + 1);
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value) || 1;
     setQuantity(Math.max(1, value));
   };
 
   const handleAddToCart = () => {
-    if (status === 'unauthenticated') {
+    if (!session) {
       router.push('/login');
-      return;
-    }
-    
-    if (status === 'authenticated' && !session.user.verified) {
-      router.push('/verify');
       return;
     }
 
@@ -69,6 +62,10 @@ export default function ProductDetailPage() {
       addToCart(product, quantity);
       alert(`${quantity} عدد ${product.name} به سبد خرید اضافه شد`);
     }
+  };
+
+  const handleCategoryClick = (category) => {
+    router.push(`/products/category/${encodeURIComponent(category)}`);
   };
 
   const formatPrice = (price) => {
@@ -98,14 +95,14 @@ export default function ProductDetailPage() {
   }
 
   return (
-     <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row gap-8 mb-12">
         {/* Product Image Section */}
         <div className="md:w-1/2 bg-white p-4 rounded-lg shadow-md flex justify-center">
           <div className="relative w-full h-96">
             <Image
               src={product.imageUrl || '/placeholder-product.jpg'}
-              alt={`تصویر ${product.name}`}
+              alt={product.name}
               fill
               className="object-contain"
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -215,10 +212,10 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Related Products */}
-     <RelatedProducts 
-  currentProductId={product._id} 
-  category={product.categories?.[0]} // Ensure categories exists
-/>
+      <RelatedProducts 
+        currentProductId={product._id} 
+        category={product.categories?.[0]}
+      />
     </div>
   );
 }
