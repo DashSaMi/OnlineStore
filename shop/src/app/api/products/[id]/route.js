@@ -1,18 +1,14 @@
-// app/api/products/[id]/route.js
-import { connectToDatabase } from '../../../../lib/mongodb';
+import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 export async function GET(request, { params }) {
   try {
-    const { db } = await connectToDatabase();
+    const { products } = await getDatabase();
     const { id } = params;
 
-    // Check if the id is a valid MongoDB ObjectId
+    // Try by ObjectId first
     if (ObjectId.isValid(id)) {
-      const product = await db.collection('products').findOne({ 
-        _id: new ObjectId(id) 
-      });
-      
+      const product = await products.findOne({ _id: new ObjectId(id) });
       if (product) {
         return Response.json({
           ...product,
@@ -21,13 +17,10 @@ export async function GET(request, { params }) {
       }
     }
 
-    // If not found by _id or not a valid ObjectId, try numeric id
+    // Fallback to numeric ID
     const numericId = Number(id);
     if (!isNaN(numericId)) {
-      const product = await db.collection('products').findOne({ 
-        id: numericId 
-      });
-      
+      const product = await products.findOne({ id: numericId });
       if (product) {
         return Response.json({
           ...product,
@@ -36,17 +29,11 @@ export async function GET(request, { params }) {
       }
     }
 
-    return new Response(JSON.stringify({ error: 'Product not found' }), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json' }
-    });
-    
+    return Response.json({ error: 'Product not found' }, { status: 404 });
   } catch (error) {
-    return new Response(JSON.stringify({ 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return Response.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 }

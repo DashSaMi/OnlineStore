@@ -1,25 +1,18 @@
-// app/api/products/route.js
-import { getDb } from '../../../lib/mongodb';
-import { ObjectId } from 'mongodb';
+import { getDatabase } from '@/lib/mongodb';
 
 export async function GET(request) {
   try {
-    const db = await getDb();
-    
+    const { products } = await getDatabase();
     const { searchParams } = new URL(request.url);
     const bestSellers = searchParams.get('bestSellers');
     
     const query = bestSellers === 'true' ? { isBestSeller: true } : {};
+    const results = await products.find(query).limit(10).toArray();
     
-    const products = await db.collection('products').find(query).limit(10).toArray();
-    
-    // Convert ObjectId to string for client-side
-    const serializedProducts = products.map(product => ({
+    return Response.json(results.map(product => ({
       ...product,
       _id: product._id.toString()
-    }));
-    
-    return Response.json(serializedProducts);
+    })));
   } catch (error) {
     return Response.json(
       { error: error.message },

@@ -1,19 +1,14 @@
+// lib/mongodb.js
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
-const options = {
-  connectTimeoutMS: 10000,
-  socketTimeoutMS: 10000,
-  serverSelectionTimeoutMS: 10000,
-  maxPoolSize: 10,
-};
+const dbName = process.env.MONGODB_DB_NAME || 'SamanOnlineShop';
+const options = { /* your options */ };
 
 let client;
 let clientPromise;
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
-}
+if (!uri) throw new Error('Please add your Mongo URI');
 
 if (process.env.NODE_ENV === 'development') {
   if (!global._mongoClientPromise) {
@@ -26,17 +21,16 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-// Add this function
-export async function connectToDatabase() {
+export async function getDatabase() {
   const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB_NAME);
-  return { client, db };
-}
+  const db = client.db(dbName);
 
-// Keep existing exports
-export async function getDb() {
-  const client = await clientPromise;
-  return client.db(process.env.MONGODB_DB_NAME);
+  return {
+    db,
+    users: db.collection('users'),
+    products: db.collection('products'),
+    accounts: db.collection('accounts'),
+  };
 }
 
 export default clientPromise;

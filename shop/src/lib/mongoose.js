@@ -38,4 +38,4 @@ async function connectToDB() {
   return cached.conn;
 }
 
-export { connectToDB };
+export { connectToDB }; 
