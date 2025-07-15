@@ -1,8 +1,9 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import clientPromise, { getDatabase } from '@/lib/mongodb'; // <-- import getDatabase helper
+import clientPromise, { getDatabase } from '@/lib/mongodb';
 
+// Export authOptions separately
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -26,7 +27,8 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account.provider === 'google') {
-        const { users } = await getDatabase();
+        const { db } = await getDatabase();
+        const users = db.collection('users');
 
         const [firstName, lastName] = user.name?.split(' ') ?? ['', ''];
 
@@ -45,7 +47,6 @@ export const authOptions = {
       }
       return true;
     },
-
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.sub;

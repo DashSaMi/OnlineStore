@@ -3,6 +3,12 @@ import { useCart } from '../context/CartContext'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { formatPrice } from '@/lib/format'
+import { useState } from 'react'
 
 export default function CartPage() {
   const {
@@ -14,27 +20,68 @@ export default function CartPage() {
     totalItems,
     totalPrice,
   } = useCart()
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('fa-IR', {
-      style: 'currency',
-      currency: 'IRR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price)
-  }
+  
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const handleIncrement = (productId) => {
-    const product = cart.find(item => item._id === productId)
-    if (product) {
-      updateQuantity(productId, product.quantity + 1)
+    const item = cart.find(item => item._id === productId)
+    if (item) {
+      updateQuantity(productId, item.quantity + 1)
     }
   }
 
   const handleDecrement = (productId) => {
-    const product = cart.find(item => item._id === productId)
-    if (product) {
-      updateQuantity(productId, product.quantity - 1)
+    const item = cart.find(item => item._id === productId)
+    if (item && item.quantity > 1) {
+      updateQuantity(productId, item.quantity - 1)
+    }
+  }
+
+  const handlePayment = async () => {
+    if (!session) {
+      router.push('/login?callbackUrl=/cart')
+      return
+    }
+
+    if (cart.length === 0) {
+      toast.error('سبد خرید شما خالی است')
+      return
+    }
+
+    setIsProcessing(true)
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cart,
+          totalPrice: totalPrice
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || `خطا در پرداخت (کد ${response.status})`)
+      }
+
+      const data = await response.json()
+
+      if (data.success) {
+        toast.success(data.message)
+        clearCart()
+        router.push(`/orders/${data.orderId}`)
+      } else {
+        throw new Error(data.message || 'خطا در ثبت سفارش')
+      }
+    } catch (error) {
+      console.error('Payment error:', error)
+      toast.error(error.message || 'خطا در پرداخت')
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -54,6 +101,19 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      
       <h1 className="text-2xl font-bold mb-8">سبد خرید ({totalItems} آیتم)</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -125,8 +185,14 @@ export default function CartPage() {
             <span>مبلغ قابل پرداخت:</span>
             <span className="text-red-600">{formatPrice(totalPrice)}</span>
           </div>
-          <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
-            پرداخت
+          <button 
+            onClick={handlePayment}
+            disabled={isProcessing}
+            className={`w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors ${
+              isProcessing ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
+          >
+            {isProcessing ? 'در حال پردازش...' : 'پرداخت'}
           </button>
           <button
             onClick={clearCart}

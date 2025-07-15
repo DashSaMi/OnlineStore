@@ -1,14 +1,14 @@
 'use client';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { FaShoppingCart, FaUser, FaSignOutAlt, FaHome, FaBoxOpen } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSignOutAlt, FaHome, FaBoxOpen, FaClipboardList } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import { useCart } from '../context/CartContext'; // Added import
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { totalItems } = useCart(); // Moved inside component
+  const { totalItems } = useCart();
 
   const handleSignIn = async () => {
     const result = await signIn('google', { 
@@ -38,6 +38,12 @@ export default function Navbar() {
               <FaBoxOpen className="text-lg" />
               <span>محصولات</span>
             </Link>
+            {session && (
+              <Link href="/orders" className="flex items-center gap-1 text-gray-700 hover:text-blue-600">
+                <FaClipboardList className="text-lg" />
+                <span>سفارشات من</span>
+              </Link>
+            )}
           </nav>
 
           {/* User Actions */}
