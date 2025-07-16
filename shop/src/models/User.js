@@ -1,3 +1,4 @@
+//src/models/User.js
 import { getDb } from '@/lib/mongodb';
 
 export async function findUserByEmail(email) {

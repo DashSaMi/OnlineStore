@@ -1,11 +1,9 @@
 import { MongoClient } from 'mongodb';
-import mongoose from 'mongoose'; // Add mongoose import
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB_NAME || 'SamanOnlineShop';
-const options = { /* your options */ };
+const options = {};
 
-// Your existing MongoDB native driver code
 let client;
 let clientPromise;
 
@@ -22,37 +20,30 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-// Your existing getDatabase function
 export async function getDatabase() {
-  const client = await clientPromise;
-  const db = client.db(dbName);
-
-  return {
-    db,
-    users: db.collection('users'),
-    products: db.collection('products'),
-    accounts: db.collection('accounts'),
-  };
-}
-
-// Add mongoose connection function
-export async function connectToDB() {
-  if (mongoose.connection.readyState === 1) {
-    return mongoose.connection;
-  }
-
   try {
-    await mongoose.connect(uri, {
-      dbName,
-      ...options
-    });
-    console.log('MongoDB connected via Mongoose');
-    return mongoose.connection;
+    const client = await clientPromise;
+    const db = client.db(dbName);
+    
+    // Verify connection and collection
+    await db.command({ ping: 1 });
+    const collections = await db.listCollections().toArray();
+    
+    if (!collections.some(col => col.name === 'products')) {
+      console.warn('Products collection not found - creating it');
+      await db.createCollection('products');
+    }
+
+    return {
+      db,
+      products: db.collection('products'),
+      client
+    };
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error('Database connection error:', error);
     throw error;
   }
 }
 
-// Keep your existing default export
+export const connectToDatabase = getDatabase;
 export default clientPromise;

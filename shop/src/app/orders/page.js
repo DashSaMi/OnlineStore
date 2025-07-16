@@ -42,7 +42,8 @@ export default function OrdersPage() {
           throw new Error(data.message || 'Failed to fetch orders');
         }
 
-        setOrders(data.orders);
+        setOrders(data.orders);  // <-- stays the same here (matches API)
+
       } catch (err) {
         console.error('Fetch error:', err);
         setError(err.message);

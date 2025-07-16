@@ -1,66 +1,89 @@
-//app/api/orders/[id]/route.js
 import { getDatabase } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { ObjectId } from 'mongodb';
 
-export async function GET(request, { params }) {
+const transformOrder = (order) => ({
+  ...order,
+  _id: order._id.toString(),
+  userId: order.userId.toString(),
+  items: order.items.map((item) => ({
+    ...item,
+    productId: item.productId?.toString() || null,
+  })),
+  createdAt: order.createdAt.toISOString(),
+  updatedAt: order.updatedAt?.toISOString() || null,
+});
+
+const isAdminRequest = (headers) => {
+  const authHeader = headers.get('authorization');
+  return (
+    authHeader?.startsWith('Bearer ') &&
+    authHeader.split(' ')[1] === process.env.ADMIN_SECRET
+  );
+};
+
+export async function GET(req, context) {
   try {
-    const { id } = params;
+    const { db } = await getDatabase();
+    const id = context?.params?.id;
 
-    // Verify session
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!id || !ObjectId.isValid(id)) {
       return NextResponse.json(
-        { success: false, message: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, message: 'Invalid order ID format' },
+        { success: false, message: 'Invalid or missing order ID' },
         { status: 400 }
       );
     }
 
-    const { db } = await getDatabase();
+    const isAdmin = isAdminRequest(req.headers);
 
-    // Find order (make sure to match both ID and user ID)
-    const order = await db.collection('orders').findOne({
-      _id: new ObjectId(id),
-      userId: new ObjectId(session.user.id)
-    });
-
-    if (!order) {
-      return NextResponse.json(
-        { success: false, message: 'Order not found' },
-        { status: 404 }
-      );
-    }
-
-    // Prepare response data
-    const responseData = {
-      success: true,
-      order: {
-        ...order,
-        _id: order._id.toString(),
-        userId: order.userId.toString(),
-        items: order.items.map(item => ({
-          ...item,
-          productId: item.productId?.toString() || null
-        }))
+    if (!isAdmin) {
+      const session = await getServerSession(authOptions);
+      if (!session?.user?.id) {
+        return NextResponse.json(
+          { success: false, message: 'Authentication required' },
+          { status: 401 }
+        );
       }
-    };
 
-    return NextResponse.json(responseData, { status: 200 });
+      // Fetch order for the authenticated user
+      const order = await db.collection('orders').findOne({
+        _id: new ObjectId(id),
+        userId: new ObjectId(session.user.id),
+      });
 
+      if (!order) {
+        return NextResponse.json(
+          { success: false, message: 'Order not found' },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({ success: true, order: transformOrder(order) });
+    } else {
+      // Admin can fetch any order
+      const order = await db.collection('orders').findOne({
+        _id: new ObjectId(id),
+      });
+
+      if (!order) {
+        return NextResponse.json(
+          { success: false, message: 'Order not found' },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({ success: true, order: transformOrder(order) });
+    }
   } catch (error) {
-    console.error('Order fetch error:', error);
+    console.error('Single order fetch error:', error);
     return NextResponse.json(
-      { success: false, message: 'Server error', error: error.message },
+      {
+        success: false,
+        message: 'Failed to fetch order',
+        error: process.env.NODE_ENV === 'development' ? error.message : null,
+      },
       { status: 500 }
     );
   }
