@@ -1,4 +1,3 @@
-// app/api/admin/orders/route.js (Port 3001)
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -8,7 +7,6 @@ export async function GET(request) {
     const mainAppUrl = new URL('http://localhost:3000/api/orders')
     const { searchParams } = new URL(request.url)
     
-    // Forward all query parameters
     searchParams.forEach((value, key) => {
       mainAppUrl.searchParams.append(key, value)
     })
@@ -27,7 +25,13 @@ export async function GET(request) {
     }
 
     const data = await response.json()
-    return NextResponse.json(data)
+    
+    // Standardize the response format
+    return NextResponse.json({
+      success: true,
+      data: data.orders || data.data || [],
+      message: 'Orders fetched successfully'
+    })
 
   } catch (error) {
     console.error('[Admin Orders Proxy] Error:', error)
@@ -40,14 +44,4 @@ export async function GET(request) {
       { status: 500 }
     )
   }
-}
-
-export async function OPTIONS() {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  })
 }

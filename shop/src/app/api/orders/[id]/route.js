@@ -1,3 +1,4 @@
+//app/api/orders/[id]/route.js
 import { getDatabase } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
