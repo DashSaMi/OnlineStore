@@ -1,3 +1,4 @@
+//app/dashboard/orders/[id]/components/SafeImage.js
 'use client';
 
 import Image from 'next/image';

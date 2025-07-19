@@ -1,10 +1,21 @@
+// app/dashboard/orders/[id]/components/OrderDetail.js
 'use client';
 
 import SafeImage from './SafeImage';
+import { useTransition } from 'react';
+import { updateOrderStatus } from '../actions';
 
 export default function OrderDetail({ order }) {
   const formatDate = (dateString) => new Date(dateString).toLocaleString();
   const formatPrice = (price) => price?.toLocaleString() || '0';
+  const [isPending, startTransition] = useTransition();
+
+  const handleStatusUpdate = () => {
+    startTransition(async () => {
+      await updateOrderStatus(order._id, 'complete');
+      window.location.reload();
+    });
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow">
@@ -20,6 +31,15 @@ export default function OrderDetail({ order }) {
               <span className="font-medium">Status:</span>{' '}
               <span className="capitalize">{order.status}</span>
             </p>
+            {order.status === 'pending' && (
+              <button
+                onClick={handleStatusUpdate}
+                disabled={isPending}
+                className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+              >
+                {isPending ? 'Updating...' : 'Mark as Complete'}
+              </button>
+            )}
             <p>
               <span className="font-medium">Date:</span> {formatDate(order.createdAt)}
             </p>

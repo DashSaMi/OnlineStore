@@ -1,8 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #f0f0f0;
+  --primary: #8b5cf6;
+  --secondary: #06b6d4;
+  --accent: #f59e0b;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --mystical-purple: #7c3aed;
+  --mystical-blue: #3b82f6;
+  --mystical-green: #059669;
+  --mystical-gold: #d97706;
+  --mystical-pink: #ec4899;
 }
 
 @theme inline {
@@ -12,31 +23,233 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* Set the base font family */
+/* Fantasy-themed base styles */
 body {
   font-family: var(--font-vazir), -apple-system, BlinkMacSystemFont, 
                "Segoe UI", "Helvetica Neue", Tahoma, sans-serif;
-  font-weight: 500; /* Medium weight for better readability */
+  font-weight: 500;
   line-height: 1.6;
-  color: #333; /* Dark gray for better contrast */
+  color: var(--foreground);
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
 }
 
-/* Make headings bolder */
+/* Magical background particles effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(139, 92, 246, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(59, 130, 246, 0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(236, 72, 153, 0.3), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(217, 119, 6, 0.3), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(5, 150, 105, 0.3), transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: sparkle 20s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes sparkle {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-100px); }
+}
+
+/* Enhanced headings with better visibility */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
-/* Optional: Enhance text rendering */
+/* Magical scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 15, 35, 0.8);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+  border-radius: 10px;
+  border: 2px solid rgba(15, 15, 35, 0.8);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #7c3aed, #0891b2);
+}
+
+/* Enhanced text rendering */
 * {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Magical selection */
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #f0f0f0;
+}
+
+/* Fantasy-themed utility classes */
+.magical-glow {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.magical-border {
+  border: 2px solid transparent;
+  background: linear-gradient(45deg, #8b5cf6, #06b6d4, #f59e0b, #ec4899) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.magical-gradient {
+  background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 25%, #f59e0b 50%, #ec4899 75%, #10b981 100%);
+  background-size: 200% 200%;
+  animation: gradientFlow 4s ease-in-out infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Floating animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse glow animation */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+}
+
+/* Shimmer effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Magical button hover effects */
+.magical-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.magical-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.magical-button:hover::before {
+  left: 100%;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Magical card hover effect */
+.magical-card {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.magical-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #8b5cf6, #06b6d4, #f59e0b, #ec4899);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.magical-card:hover::before {
+  opacity: 0.1;
+}
+
+.magical-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+}
+
+/* Loading spinner */
+.magical-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(139, 92, 246, 0.3);
+  border-top: 4px solid #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design enhancements */
+@media (max-width: 768px) {
+  body::before {
+    background-size: 150px 75px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    text-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+  }
 }

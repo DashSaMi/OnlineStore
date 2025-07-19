@@ -1,3 +1,4 @@
+//app/dashboard/orders/[id]/page.js
 import OrderDetail from './components/OrderDetail';
 import { fetchAdminOrderById } from './actions';
 

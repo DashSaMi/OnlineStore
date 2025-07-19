@@ -3,7 +3,7 @@
 import { useCart } from '../context/CartContext'
 import Link from 'next/link'
 import Image from 'next/image'
-import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa'
+import { FaTrash, FaPlus, FaMinus, FaShoppingCart, FaMagic, FaCrown, FaStar, FaHeart } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -88,119 +88,190 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">سبد خرید شما خالی است</h1>
-        <Link
-          href="/products"
-          className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          بازگشت به محصولات
-        </Link>
+      <div className="min-h-screen relative py-16 px-4">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
+        <div className="container mx-auto text-center relative z-10">
+          <div className="glass rounded-3xl p-12 max-w-lg mx-auto">
+            <FaShoppingCart className="text-purple-400 text-6xl mx-auto mb-6 animate-pulse" />
+            <h1 className="text-4xl font-bold text-white mb-6">
+              سبد خرید شما خالی است
+            </h1>
+            <p className="text-gray-300 text-lg mb-8">محصولات جادویی منتظر شما هستند!</p>
+            <Link
+              href="/products"
+              className="inline-block bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105"
+            >
+              بازگشت به محصولات
+            </Link>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={true}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+    <div className="min-h-screen relative py-16 px-4">
+      {/* Magical background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
       
-      <h1 className="text-2xl font-bold mb-8">سبد خرید ({totalItems} آیتم)</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-lg shadow-md p-4 mb-4 flex flex-col sm:flex-row gap-4"
-            >
-              <div className="relative w-full sm:w-32 h-32">
-                <Image
-                  src={item.imageUrl || '/placeholder-product.jpg'}
-                  alt={item.name}
-                  fill
-                  className="object-contain"
-                  sizes="100px"
-                />
-              </div>
-              <div className="flex-grow">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
-                <div className="flex items-center gap-4 my-2">
-                  <span className="text-lg font-bold text-red-600">
-                    {formatPrice(item.price)}
-                  </span>
-                  {item.discount > 0 && (
-                    <span className="text-sm text-gray-500 line-through">
-                      {formatPrice(item.originalPrice)}
-                    </span>
-                  )}
+      <div className="container mx-auto relative z-10">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={true}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+        
+        {/* Header with magical styling */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <FaShoppingCart className="text-purple-400 text-3xl animate-pulse" />
+            <h1 className="text-4xl md:text-5xl font-bold text-white">
+              سبد خرید جادویی
+            </h1>
+            <FaShoppingCart className="text-cyan-400 text-3xl animate-pulse" />
+          </div>
+          <p className="text-xl text-gray-300 mb-6">({totalItems} آیتم جادویی)</p>
+          
+          {/* Magical divider */}
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="w-16 h-1 bg-gradient-to-r from-transparent to-purple-500 rounded-full"></div>
+            <FaStar className="text-purple-400 text-xl animate-pulse" />
+            <div className="w-16 h-1 bg-gradient-to-l from-transparent to-cyan-500 rounded-full"></div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-6">
+            {cart.map((item, index) => (
+              <div
+                key={item._id}
+                className="glass rounded-2xl p-6 magical-card group"
+                style={{animationDelay: `${index * 0.1}s`}}
+              >
+                <div className="flex flex-col sm:flex-row gap-6">
+                  {/* Product Image */}
+                  <div className="relative w-full sm:w-40 h-40 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden">
+                    <Image
+                      src={item.imageUrl || '/placeholder-product.jpg'}
+                      alt={item.name}
+                      fill
+                      className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                      sizes="160px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  
+                  {/* Product Details */}
+                  <div className="flex-grow">
+                    <h2 className="text-xl font-bold text-gray-100 mb-3 group-hover:text-purple-300 transition-colors duration-300">
+                      {item.name}
+                    </h2>
+                    <div className="flex items-center gap-4 my-3">
+                      <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                        {formatPrice(item.price)}
+                      </span>
+                      {item.discount > 0 && (
+                        <span className="text-sm text-gray-400 line-through">
+                          {formatPrice(item.originalPrice)}
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-3 mt-6">
+                      <button
+                        onClick={() => handleDecrement(item._id)}
+                        className="p-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-110"
+                        disabled={item.quantity <= 1}
+                      >
+                        <FaMinus size={14} />
+                      </button>
+                      <span className="w-12 text-center text-lg font-bold text-gray-200 bg-white/10 px-3 py-2 rounded-lg">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => handleIncrement(item._id)}
+                        className="p-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-110"
+                      >
+                        <FaPlus size={14} />
+                      </button>
+                      <button
+                        onClick={() => removeFromCart(item._id)}
+                        className="p-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-lg transition-all duration-300 transform hover:scale-110 mr-auto"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 mt-4">
-                  <button
-                    onClick={() => handleDecrement(item._id)}
-                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
-                    disabled={item.quantity <= 1}
-                  >
-                    <FaMinus size={12} />
-                  </button>
-                  <span className="w-8 text-center">{item.quantity}</span>
-                  <button
-                    onClick={() => handleIncrement(item._id)}
-                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
-                  >
-                    <FaPlus size={12} />
-                  </button>
-                  <button
-                    onClick={() => removeFromCart(item._id)}
-                    className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 ml-auto"
-                  >
-                    <FaTrash />
-                  </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Order Summary */}
+          <div className="glass rounded-2xl p-8 h-fit magical-card">
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+              <FaCrown className="text-yellow-400" />
+              خلاصه سفارش
+            </h2>
+            
+            <div className="space-y-4 mb-6">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-300">تعداد کالاها:</span>
+                <span className="text-purple-400 font-bold">{totalItems}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-300">جمع کل:</span>
+                <span className="text-cyan-400 font-bold">{formatPrice(totalPrice)}</span>
+              </div>
+              <div className="border-t border-white/20 pt-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-200 font-bold">مبلغ قابل پرداخت:</span>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                    {formatPrice(totalPrice)}
+                  </span>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">خلاصه سفارش</h2>
-          <div className="flex justify-between mb-2">
-            <span>تعداد کالاها:</span>
-            <span>{totalItems}</span>
+            
+            <button 
+              onClick={handlePayment}
+              disabled={isProcessing}
+              className={`w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-6 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 mb-4 ${
+                isProcessing ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+            >
+              {isProcessing ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="magical-spinner w-5 h-5"></div>
+                  <span>در حال پردازش...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-2">
+                  <FaHeart className="text-lg" />
+                  <span>پرداخت جادویی</span>
+                </div>
+              )}
+            </button>
+            
+            <button
+              onClick={clearCart}
+              className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-3 px-6 rounded-xl font-bold transition-all duration-300 transform hover:scale-105"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <FaTrash className="text-lg" />
+                <span>پاک کردن سبد خرید</span>
+              </div>
+            </button>
           </div>
-          <div className="flex justify-between mb-2">
-            <span>جمع کل:</span>
-            <span>{formatPrice(totalPrice)}</span>
-          </div>
-          <div className="flex justify-between font-bold text-lg mt-4 mb-6">
-            <span>مبلغ قابل پرداخت:</span>
-            <span className="text-red-600">{formatPrice(totalPrice)}</span>
-          </div>
-          <button 
-            onClick={handlePayment}
-            disabled={isProcessing}
-            className={`w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors ${
-              isProcessing ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
-          >
-            {isProcessing ? 'در حال پردازش...' : 'پرداخت'}
-          </button>
-          <button
-            onClick={clearCart}
-            className="w-full mt-2 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors"
-          >
-            پاک کردن سبد خرید
-          </button>
         </div>
       </div>
     </div>

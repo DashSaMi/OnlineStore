@@ -1,3 +1,4 @@
+// app/dashboard/orders/[id]/actions.js
 'use server';
 
 import { getDatabase } from '@/lib/mongodb';
@@ -17,11 +18,9 @@ export async function fetchAdminOrderById(id) {
     const { db } = await getDatabase();
     if (!db) throw new Error('Could not connect to database');
 
-    // Find order by _id
     const order = await db.collection('orders').findOne({ _id: new ObjectId(id) });
     if (!order) throw new Error('Order not found');
 
-    // Default user info for guest
     let userInfo = {
       customerName: 'Guest Customer',
       customerEmail: 'No email provided',
@@ -32,10 +31,8 @@ export async function fetchAdminOrderById(id) {
       let user = null;
 
       if (isValidObjectId(order.userId)) {
-        // Query users by ObjectId _id
         user = await db.collection('users').findOne({ _id: new ObjectId(order.userId) });
       } else {
-        // Query users by string _id (if your _id is string)
         user = await db.collection('users').findOne({ _id: order.userId });
       }
 
@@ -54,15 +51,35 @@ export async function fetchAdminOrderById(id) {
         _id: order._id.toString(),
         userId: order.userId?.toString(),
         ...userInfo,
-        items:
-          order.items?.map((item) => ({
-            ...item,
-            productId: item.productId?.toString(),
-          })) || [],
+        items: order.items?.map((item) => ({
+          ...item,
+          productId: item.productId?.toString(),
+        })) || [],
       })
     );
   } catch (error) {
     console.error('[fetchAdminOrderById] Error:', error);
     throw new Error(error.message || 'Failed to fetch order');
+  }
+}
+
+export async function updateOrderStatus(id, status) {
+  try {
+    const { db } = await getDatabase();
+    if (!db) throw new Error('Could not connect to database');
+
+    const result = await db.collection('orders').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { status, updatedAt: new Date() } }
+    );
+
+    if (!result.modifiedCount) {
+      throw new Error('Order status update failed');
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('[updateOrderStatus] Error:', error);
+    throw new Error(error.message || 'Failed to update status');
   }
 }

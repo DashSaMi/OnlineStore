@@ -15,6 +15,10 @@ export default function OrderPage() {
   const router = useRouter();
   const { id } = useParams();
 
+  const getStatusLabel = (status) => {
+    return status === 'complete' ? 'تکمیل شده' : 'در حال پردازش';
+  };
+
   useEffect(() => {
     if (!session) {
       router.push('/login');
@@ -96,12 +100,9 @@ export default function OrderPage() {
         <h2 className="text-xl font-semibold mb-4">وضعیت سفارش</h2>
         <div className="flex items-center gap-2">
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-            order.status === 'completed' ? 'bg-green-100 text-green-800' :
-            order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-            'bg-yellow-100 text-yellow-800'
+            order.status === 'complete' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
           }`}>
-            {order.status === 'completed' ? 'تکمیل شده' :
-             order.status === 'cancelled' ? 'لغو شده' : 'در حال پردازش'}
+            {getStatusLabel(order.status)}
           </span>
           <span className="text-gray-500 text-sm">
             {new Date(order.createdAt).toLocaleDateString('fa-IR')}
