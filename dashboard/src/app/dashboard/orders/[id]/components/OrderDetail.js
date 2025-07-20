@@ -18,12 +18,12 @@ export default function OrderDetail({ order }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div className="bg-white p-8 rounded-xl shadow-md space-y-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
         {/* Order Information */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Order Information</h2>
-          <div className="space-y-2">
+          <h2 className="text-xl font-semibold mb-6 text-gray-800">Order Information</h2>
+          <div className="space-y-3 text-gray-700">
             <p>
               <span className="font-medium">Order ID:</span> {order._id}
             </p>
@@ -35,7 +35,7 @@ export default function OrderDetail({ order }) {
               <button
                 onClick={handleStatusUpdate}
                 disabled={isPending}
-                className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                className="mt-2 px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition"
               >
                 {isPending ? 'Updating...' : 'Mark as Complete'}
               </button>
@@ -54,64 +54,64 @@ export default function OrderDetail({ order }) {
 
         {/* Customer Information */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Customer Information</h2>
-          <div className="flex items-start gap-4">
+          <h2 className="text-xl font-semibold mb-6 text-gray-800">Customer Information</h2>
+          <div className="flex items-start gap-5">
             {order.customerImage && (
-              <div className="relative w-12 h-12 rounded-full overflow-hidden">
+              <div className="relative w-14 h-14 rounded-full overflow-hidden border border-gray-200">
                 <SafeImage
                   src={order.customerImage}
                   alt="Customer"
-                  width={48}
-                  height={48}
+                  width={56}
+                  height={56}
                   className="object-cover"
                 />
               </div>
             )}
             <div>
-              <p className="font-medium">{order.customerName || 'Guest Customer'}</p>
+              <p className="font-medium text-gray-900">{order.customerName || 'Guest Customer'}</p>
               <p className="text-gray-600">{order.customerEmail || 'No email provided'}</p>
-              <p className="text-sm text-gray-500 mt-1">User ID: {order.userId || 'N/A'}</p>
+              <p className="text-xs text-gray-500 mt-1">User ID: {order.userId || 'N/A'}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Order Summary */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-        <div className="bg-gray-50 p-4 rounded">
-          <p className="text-xl font-bold">Total: {formatPrice(order.totalPrice)} Toman</p>
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-6 text-gray-800">Order Summary</h2>
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+          <p className="text-2xl font-bold text-green-700">Total: {formatPrice(order.totalPrice)} Toman</p>
         </div>
       </div>
 
       {/* Order Items */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">Order Items ({order.items.length})</h2>
-        <div className="space-y-4">
+        <h2 className="text-xl font-semibold mb-6 text-gray-800">Order Items <span className='text-gray-400 font-normal'>({order.items.length})</span></h2>
+        <div className="space-y-6">
           {order.items.map((item, index) => (
-            <div key={index} className="flex items-start border-b pb-4">
+            <div key={index} className="flex items-start border-b pb-6 last:border-b-0">
               {item.imageUrl && (
-                <div className="relative w-20 h-20 mr-4 min-w-[80px]">
+                <div className="relative w-24 h-24 mr-6 min-w-[96px] border border-gray-100 rounded-lg overflow-hidden">
                   <SafeImage
                     src={item.imageUrl}
                     alt={item.name}
-                    width={80}
-                    height={80}
+                    width={96}
+                    height={96}
                     className="object-contain"
                   />
                 </div>
               )}
               <div className="flex-1">
-                <h3 className="font-medium">{item.name}</h3>
-                <div className="grid grid-cols-2 mt-2 text-sm">
+                <h3 className="font-medium text-lg text-gray-900">{item.name}</h3>
+                <div className="grid grid-cols-2 mt-2 text-sm gap-2">
                   <div>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: {formatPrice(item.price)} Toman</p>
+                    <p>Quantity: <span className="font-medium">{item.quantity}</span></p>
+                    <p>Price: <span className="font-medium">{formatPrice(item.price)}</span> Toman</p>
                   </div>
                   <div className="text-right">
                     {item.discount > 0 && <p className="text-green-600">Discount: {item.discount}%</p>}
-                    <p>Original: {formatPrice(item.originalPrice)} Toman</p>
-                    <p className="font-medium mt-1">
+                    <p>Original: <span className="line-through text-gray-400">{formatPrice(item.originalPrice)}</span> Toman</p>
+                    <p className="font-medium mt-1 text-blue-700">
                       Subtotal: {formatPrice(item.price * item.quantity)} Toman
                     </p>
                   </div>

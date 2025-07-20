@@ -7,6 +7,7 @@ import { FaMinus, FaPlus, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { useSession } from 'next-auth/react';
 import RelatedProducts from '../../components/RelatedProducts';
+import { Types } from 'mongoose';
 
 export default function ProductDetailPage({ id: initialId }) {
   const params = useParams();
@@ -159,7 +160,7 @@ export default function ProductDetailPage({ id: initialId }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-gray-900 to-gray-800 container mx-auto px-4 py-8">
       {/* Best Seller Badge */}
       {product.isBestSeller && (
         <div className="mb-4">
@@ -169,15 +170,15 @@ export default function ProductDetailPage({ id: initialId }) {
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-8 mb-12">
+      <div className="flex flex-col md:flex-row gap-10 mb-12">
         {/* Product Image */}
-        <div className="md:w-1/2 bg-white p-4 rounded-lg shadow-md flex justify-center">
-          <div className="relative w-full h-96">
+        <div className="md:w-1/2 flex justify-center items-center">
+          <div className="relative w-full max-w-md h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-xl flex items-center justify-center overflow-hidden">
             <Image
               src={product.imageUrl}
               alt={product.name}
               fill
-              className="object-contain"
+              className="object-contain drop-shadow-xl"
               sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
@@ -185,21 +186,21 @@ export default function ProductDetailPage({ id: initialId }) {
         </div>
 
         {/* Product Details */}
-        <div className="md:w-1/2">
+        <div className="md:w-1/2 flex flex-col justify-center bg-[#18181b] rounded-2xl shadow-lg p-8 text-white">
           {/* Category Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
             {product.categories.map((category, index) => (
               <button
                 key={index}
                 onClick={() => handleCategoryClick(category)}
-                className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded hover:bg-blue-200 transition-colors"
+                className="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded hover:bg-blue-800 transition-colors"
               >
                 {category}
               </button>
             ))}
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-extrabold text-white mb-3">
             {product.name}
           </h1>
 
@@ -209,11 +210,11 @@ export default function ProductDetailPage({ id: initialId }) {
               {[...Array(5)].map((_, i) => (
                 <FaStar
                   key={i}
-                  className={i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}
+                  className={i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-700'}
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-400">
               ({product.reviews} نظر)
             </span>
           </div>
@@ -222,18 +223,18 @@ export default function ProductDetailPage({ id: initialId }) {
           <div className="mb-6">
             {product.discount > 0 ? (
               <div className="flex items-center gap-3">
-                <span className="text-lg font-bold text-red-600">
+                <span className="text-2xl font-bold text-red-400">
                   {formatPrice(product.price)}
                 </span>
-                <span className="text-sm text-gray-500 line-through">
+                <span className="text-base text-gray-400 line-through">
                   {formatPrice(product.originalPrice)}
                 </span>
-                <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                <span className="text-xs bg-red-900 text-red-200 px-2 py-1 rounded">
                   {product.discount}% تخفیف
                 </span>
               </div>
             ) : (
-              <span className="text-lg font-bold text-gray-800">
+              <span className="text-2xl font-bold text-white">
                 {formatPrice(product.price)}
               </span>
             )}
@@ -241,84 +242,67 @@ export default function ProductDetailPage({ id: initialId }) {
 
           {/* Stock Status */}
           <div className="mb-4">
-            <span className={`text-sm ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <span className={`text-base ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}> 
               {product.stock > 0 ? `موجود در انبار (${product.stock} عدد)` : 'ناموجود'}
             </span>
           </div>
 
-          {/* Quantity Selector */}
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2">تعداد:</label>
-            <div className="flex items-center gap-2">
+          {/* Quantity Selector & Add to Cart */}
+          <div className="mb-8 flex items-center gap-4">
+            <div className="flex items-center border border-gray-700 rounded-lg overflow-hidden bg-gray-900">
               <button
                 onClick={handleDecrement}
-                className="p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                aria-label="کاهش تعداد"
+                className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-lg text-white"
                 disabled={quantity <= 1}
               >
                 <FaMinus />
               </button>
               <input
                 type="number"
-                min="1"
-                max={product.stock}
+                min={1}
                 value={quantity}
                 onChange={handleQuantityChange}
-                className="w-16 text-center border border-gray-300 rounded py-2"
-                aria-label="تعداد محصول"
+                className="w-14 text-center border-0 focus:ring-0 focus:outline-none text-lg bg-gray-900 text-white"
               />
               <button
                 onClick={handleIncrement}
-                className="p-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                aria-label="افزایش تعداد"
-                disabled={quantity >= product.stock}
+                className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-lg text-white"
               >
                 <FaPlus />
               </button>
             </div>
+            <button
+              onClick={handleAddToCart}
+              disabled={product.stock === 0 || isAddingToCart}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold transition-all shadow-lg ${product.stock === 0 ? 'bg-gray-700 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800'}`}
+            >
+              <FaShoppingCart />
+              {isAddingToCart ? 'در حال افزودن...' : 'افزودن به سبد خرید'}
+            </button>
           </div>
 
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAddToCart}
-            disabled={isAddingToCart || product.stock <= 0}
-            className={`w-full ${
-              isAddingToCart ? 'bg-green-600' : 
-              product.stock <= 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            } text-white py-3 px-4 rounded flex items-center justify-center gap-2 transition-colors mb-6`}
-          >
-            <FaShoppingCart />
-            <span>
-              {isAddingToCart ? 'اضافه شد!' : 
-               product.stock <= 0 ? 'ناموجود' : `افزودن به سبد خرید (${quantity})`}
-            </span>
-          </button>
-
-          {/* Product Description */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-bold mb-2">توضیحات محصول</h2>
-            <p className="text-gray-700 whitespace-pre-line">
+          {/* Description */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-white mb-2">توضیحات محصول</h2>
+            <p className="text-gray-200 leading-relaxed bg-gray-900 rounded-lg p-4 shadow-inner">
               {product.description}
             </p>
           </div>
 
-          {/* Dates */}
-          <div className="mt-4 text-sm text-gray-500">
-            {product.createdAt && (
-              <p>تاریخ اضافه شدن: {product.createdAt}</p>
-            )}
-            {product.updatedAt && (
-              <p>آخرین بروزرسانی: {product.updatedAt}</p>
-            )}
+          {/* Created/Updated */}
+          <div className="text-xs text-gray-500 mt-4">
+            <span>ایجاد شده: {product.createdAt}</span>
+            {product.updatedAt && <span className="ml-4">آخرین بروزرسانی: {product.updatedAt}</span>}
           </div>
         </div>
       </div>
 
       {/* Related Products */}
-      <RelatedProducts 
-        currentProductId={product._id} 
-        category={product.categories[0]}
-      />
+      {product.categories && product.categories[0] && (
+        <div className="mt-12 bg-[#18181b] rounded-2xl shadow-lg p-8">
+          <RelatedProducts category={product.categories[0]} exclude={product._id} />
+        </div>
+      )}
     </div>
   );
 }

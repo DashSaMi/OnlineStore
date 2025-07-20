@@ -9,14 +9,14 @@ export default async function OrderDetailPage({ params }) {
     const order = await fetchAdminOrderById(id);
 
     return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Order #{order._id}</h1>
+      <div className="py-8">
+        <h1 className="text-3xl font-bold mb-8 text-gray-900">Order #{order._id}</h1>
         <OrderDetail order={order} />
       </div>
     );
   } catch (error) {
     return (
-      <div className="p-4 text-red-600">
+      <div className="p-8 text-red-600 bg-red-50 rounded">
         Error loading order: {error.message}
       </div>
     );

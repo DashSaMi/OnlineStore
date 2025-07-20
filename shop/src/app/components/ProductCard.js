@@ -26,7 +26,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="glass rounded-2xl overflow-hidden magical-card group relative border border-white/20">
+    <div className="rounded-2xl overflow-hidden group relative border border-gray-800 bg-[#18181b] shadow-xl hover:shadow-2xl transition-shadow duration-300">
       {/* Magical background glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
@@ -41,13 +41,14 @@ export default function ProductCard({ product }) {
       )}
 
       {/* Product Image with magical overlay */}
-      <div className="relative h-56 w-full bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden">
+      <div className="relative h-56 w-full bg-transparent overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         <Image
           src={product.imageUrl || '/placeholder-product.jpg'}
           alt={product.name || 'تصویر محصول'}
           fill
-          className="object-contain p-6 group-hover:scale-110 transition-transform duration-500"
+          className="object-contain p-6 group-hover:scale-110 transition-transform duration-500 bg-transparent"
+          style={{ background: 'transparent' }}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
@@ -61,7 +62,7 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Product Details */}
-      <div className="p-6 flex flex-col flex-grow relative z-10">
+      <div className="p-6 flex flex-col flex-grow relative z-10 text-white">
         {/* Product Name with magical styling */}
         <h3 className="text-xl font-bold text-gray-100 mb-3 line-clamp-2 group-hover:text-purple-300 transition-colors duration-300">
           {product.name}

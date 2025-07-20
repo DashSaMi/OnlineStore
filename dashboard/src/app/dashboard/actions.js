@@ -3,7 +3,7 @@
 
 export async function fetchOrdersServer() {
   try {
-    const response = await fetch('http://localhost:3000/api/orders', { // Note: Changed to main app's URL
+    const response = await fetch('http://localhost:3001/api/admin/orders', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
@@ -17,7 +17,14 @@ export async function fetchOrdersServer() {
     }
 
     const data = await response.json();
-    return data.data; // Changed from data.orders to data.data to match our API response
+    // Ensure we always return an array
+    if (Array.isArray(data.data)) {
+      return data.data;
+    } else if (Array.isArray(data.orders)) {
+      return data.orders;
+    } else {
+      return [];
+    }
   } catch (error) {
     console.error('Failed to fetch orders:', error);
     throw new Error(error.message || 'Could not load orders data');

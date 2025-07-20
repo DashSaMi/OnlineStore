@@ -33,27 +33,41 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  if (loading) return <div className="p-4">Loading orders...</div>;
-  if (error) return <div className="p-4 text-red-600">Error: {error}</div>;
+  if (loading) return <div className="p-8 text-lg text-gray-600">Loading orders...</div>;
+  if (error) return <div className="p-8 text-red-600 bg-red-50 rounded">Error: {error}</div>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">All Orders</h1>
-      <ul className="space-y-4">
-        {orders.map(order => (
-          <li key={order._id} className="border p-4 rounded-md">
-            <p><strong>Order ID:</strong> {order._id}</p>
-            <p><strong>Status:</strong> {order.status}</p>
-            <p><strong>Total:</strong> {order.totalPrice?.toLocaleString() ?? order.total?.toLocaleString()} Toman</p>
-            <Link
-              href={`/dashboard/orders/${order._id}`}
-              className="text-blue-600 hover:underline mt-2 inline-block"
-            >
-              View Details
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="py-8">
+      <h1 className="text-3xl font-bold mb-8 text-gray-900">All Orders</h1>
+      <div className="overflow-x-auto bg-white shadow rounded-lg">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Order ID</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Total (Toman)</th>
+              <th className="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-100">
+            {orders.map(order => (
+              <tr key={order._id} className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order._id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{order.status}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{order.totalPrice?.toLocaleString() ?? order.total?.toLocaleString()}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <Link
+                    href={`/dashboard/orders/${order._id}`}
+                    className="text-blue-600 hover:underline font-medium text-sm"
+                  >
+                    View Details
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

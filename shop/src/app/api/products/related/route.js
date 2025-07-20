@@ -1,6 +1,7 @@
 // app/api/products/related/route.js
 import { connectToDB } from '@/lib/mongoose';
 import Product from '@/models/product/product';
+import { Types } from 'mongoose';
 
 export async function GET(request) {
   try {
@@ -14,13 +15,19 @@ export async function GET(request) {
       return Response.json([]);
     }
 
-    const relatedProducts = await Product.find({
-      categories: { $in: [category] }, // Using $in to search in array
-      _id: { $ne: exclude }
-    })
-    .select('-__v')
-    .limit(4)
-    .lean();
+    const excludeId = exclude && Types.ObjectId.isValid(exclude) ? new Types.ObjectId(exclude) : undefined;
+
+    const query = {
+      categories: { $in: [category] }
+    };
+    if (excludeId) {
+      query._id = { $ne: excludeId };
+    }
+
+    const relatedProducts = await Product.find(query)
+      .select('-__v')
+      .limit(4)
+      .lean();
 
     return Response.json(relatedProducts);
   } catch (error) {
