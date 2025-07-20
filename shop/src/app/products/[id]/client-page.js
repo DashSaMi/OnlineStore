@@ -8,6 +8,7 @@ import { useCart } from '../../context/CartContext';
 import { useSession } from 'next-auth/react';
 import RelatedProducts from '../../components/RelatedProducts';
 import { Types } from 'mongoose';
+import styles from './ProductDetail.module.css';
 
 export default function ProductDetailPage({ id: initialId }) {
   const params = useParams();
@@ -112,16 +113,12 @@ export default function ProductDetailPage({ id: initialId }) {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gray-200 h-96 rounded-lg"></div>
-            <div className="space-y-4">
-              <div className="h-6 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-10 bg-gray-200 rounded w-1/4"></div>
-            </div>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSkeleton}>
+          <div className={styles.loadingTitle}></div>
+          <div className={styles.loadingGrid}>
+            <div className={styles.loadingImage}></div>
+            <div className={styles.loadingDetails}></div>
           </div>
         </div>
       </div>
@@ -130,14 +127,11 @@ export default function ProductDetailPage({ id: initialId }) {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold text-red-500">خطا در بارگذاری محصول</h1>
-        <p className="text-gray-600 mb-4">{error}</p>
-        <p className="text-sm text-gray-500 mb-4">شناسه محصول: {productId}</p>
-        <Link
-          href="/products"
-          className="text-blue-600 hover:underline mt-4 inline-block"
-        >
+      <div className={styles.errorContainer}>
+        <h1 className={styles.errorTitle}>خطا در بارگذاری محصول</h1>
+        <p className={styles.errorMessage}>{error}</p>
+        <p className={styles.errorId}>شناسه محصول: {productId}</p>
+        <Link href="/products" className={styles.errorBackLink}>
           بازگشت به صفحه محصولات
         </Link>
       </div>
@@ -146,13 +140,10 @@ export default function ProductDetailPage({ id: initialId }) {
 
   if (!product) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold text-red-500">محصول یافت نشد</h1>
-        <p className="text-gray-600 mb-4">محصول با شناسه مورد نظر وجود ندارد</p>
-        <Link
-          href="/products"
-          className="text-blue-600 hover:underline mt-4 inline-block"
-        >
+      <div className={styles.errorContainer}>
+        <h1 className={styles.errorTitle}>محصول یافت نشد</h1>
+        <p className={styles.errorMessage}>محصول با شناسه مورد نظر وجود ندارد</p>
+        <Link href="/products" className={styles.errorBackLink}>
           بازگشت به صفحه محصولات
         </Link>
       </div>
@@ -160,53 +151,49 @@ export default function ProductDetailPage({ id: initialId }) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-gray-900 to-gray-800 container mx-auto px-4 py-8">
+    <div className={styles.detailPageWrapper}>
       {/* Best Seller Badge */}
       {product.isBestSeller && (
-        <div className="mb-4">
-          <span className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded">
-            پرفروش
-          </span>
+        <div className={styles.bestSellerBadgeRow}>
+          <span className={styles.bestSellerBadge}>پرفروش</span>
         </div>
       )}
-
-      <div className="flex flex-col md:flex-row gap-10 mb-12">
+      <div className={styles.detailMainGrid}>
         {/* Product Image */}
-        <div className="md:w-1/2 flex justify-center items-center">
-          <div className="relative w-full max-w-md h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-xl flex items-center justify-center overflow-hidden">
+        <div className={styles.imageCol}>
+          <div className={styles.imageWrapper}>
             <Image
               src={product.imageUrl}
               alt={product.name}
               fill
-              className="object-contain drop-shadow-xl"
+              className={styles.productImage}
               sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
           </div>
         </div>
-
         {/* Product Details */}
-        <div className="md:w-1/2 flex flex-col justify-center bg-[#18181b] rounded-2xl shadow-lg p-8 text-white">
+        <div className={styles.detailsCol}>
           {/* Category Tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className={styles.categoryTags}>
             {product.categories.map((category, index) => (
               <button
                 key={index}
                 onClick={() => handleCategoryClick(category)}
-                className="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded hover:bg-blue-800 transition-colors"
+                className={styles.categoryTagBtn}
               >
                 {category}
               </button>
             ))}
           </div>
 
-          <h1 className="text-3xl font-extrabold text-white mb-3">
+          <h1 className={styles.productName}>
             {product.name}
           </h1>
 
           {/* Rating */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex text-yellow-400">
+          <div className={styles.ratingRow}>
+            <div className={styles.ratingStars}>
               {[...Array(5)].map((_, i) => (
                 <FaStar
                   key={i}
@@ -214,45 +201,45 @@ export default function ProductDetailPage({ id: initialId }) {
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-400">
+            <span className={styles.ratingReviews}>
               ({product.reviews} نظر)
             </span>
           </div>
 
           {/* Price */}
-          <div className="mb-6">
+          <div className={styles.priceRow}>
             {product.discount > 0 ? (
-              <div className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-red-400">
+              <div className={styles.discountPriceRow}>
+                <span className={styles.discountPrice}>
                   {formatPrice(product.price)}
                 </span>
-                <span className="text-base text-gray-400 line-through">
+                <span className={styles.originalPrice}>
                   {formatPrice(product.originalPrice)}
                 </span>
-                <span className="text-xs bg-red-900 text-red-200 px-2 py-1 rounded">
+                <span className={styles.discountBadge}>
                   {product.discount}% تخفیف
                 </span>
               </div>
             ) : (
-              <span className="text-2xl font-bold text-white">
+              <span className={styles.price}>
                 {formatPrice(product.price)}
               </span>
             )}
           </div>
 
           {/* Stock Status */}
-          <div className="mb-4">
-            <span className={`text-base ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}> 
+          <div className={styles.stockStatusRow}>
+            <span className={`${product.stock > 0 ? styles.inStock : styles.outOfStock}`}> 
               {product.stock > 0 ? `موجود در انبار (${product.stock} عدد)` : 'ناموجود'}
             </span>
           </div>
 
           {/* Quantity Selector & Add to Cart */}
-          <div className="mb-8 flex items-center gap-4">
-            <div className="flex items-center border border-gray-700 rounded-lg overflow-hidden bg-gray-900">
+          <div className={styles.quantityAndCartRow}>
+            <div className={styles.quantitySelector}>
               <button
                 onClick={handleDecrement}
-                className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-lg text-white"
+                className={styles.quantityButton}
                 disabled={quantity <= 1}
               >
                 <FaMinus />
@@ -262,11 +249,11 @@ export default function ProductDetailPage({ id: initialId }) {
                 min={1}
                 value={quantity}
                 onChange={handleQuantityChange}
-                className="w-14 text-center border-0 focus:ring-0 focus:outline-none text-lg bg-gray-900 text-white"
+                className={styles.quantityInput}
               />
               <button
                 onClick={handleIncrement}
-                className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-lg text-white"
+                className={styles.quantityButton}
               >
                 <FaPlus />
               </button>
@@ -274,7 +261,7 @@ export default function ProductDetailPage({ id: initialId }) {
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0 || isAddingToCart}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold transition-all shadow-lg ${product.stock === 0 ? 'bg-gray-700 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800'}`}
+              className={`${styles.addToCartButton} ${product.stock === 0 ? styles.disabledButton : styles.enabledButton}`}
             >
               <FaShoppingCart />
               {isAddingToCart ? 'در حال افزودن...' : 'افزودن به سبد خرید'}
@@ -282,24 +269,24 @@ export default function ProductDetailPage({ id: initialId }) {
           </div>
 
           {/* Description */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-white mb-2">توضیحات محصول</h2>
-            <p className="text-gray-200 leading-relaxed bg-gray-900 rounded-lg p-4 shadow-inner">
+          <div className={styles.descriptionRow}>
+            <h2 className={styles.descriptionTitle}>توضیحات محصول</h2>
+            <p className={styles.descriptionText}>
               {product.description}
             </p>
           </div>
 
           {/* Created/Updated */}
-          <div className="text-xs text-gray-500 mt-4">
+          <div className={styles.createdUpdatedRow}>
             <span>ایجاد شده: {product.createdAt}</span>
-            {product.updatedAt && <span className="ml-4">آخرین بروزرسانی: {product.updatedAt}</span>}
+            {product.updatedAt && <span className={styles.updatedAtText}>آخرین بروزرسانی: {product.updatedAt}</span>}
           </div>
         </div>
       </div>
 
       {/* Related Products */}
       {product.categories && product.categories[0] && (
-        <div className="mt-12 bg-[#18181b] rounded-2xl shadow-lg p-8">
+        <div className={styles.relatedProductsSection}>
           <RelatedProducts category={product.categories[0]} exclude={product._id} />
         </div>
       )}
