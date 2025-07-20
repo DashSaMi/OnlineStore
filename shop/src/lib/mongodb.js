@@ -24,11 +24,11 @@ export async function getDatabase() {
   try {
     const client = await clientPromise;
     const db = client.db(dbName);
-    
+
     // Verify connection and collection
     await db.command({ ping: 1 });
     const collections = await db.listCollections().toArray();
-    
+
     if (!collections.some(col => col.name === 'products')) {
       console.warn('Products collection not found - creating it');
       await db.createCollection('products');

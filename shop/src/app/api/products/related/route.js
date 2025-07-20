@@ -1,42 +1,30 @@
-// app/api/products/related/route.js
-import { connectToDB } from '@/lib/mongoose';
-import Product from '@/models/product/product';
-import { Types } from 'mongoose';
+import { NextResponse } from 'next/server';
+import { getDatabase } from '@/lib/mongodb';
 
 export async function GET(request) {
   try {
-    await connectToDB();
-    
     const { searchParams } = new URL(request.url);
-    const category = decodeURIComponent(searchParams.get('category'));
+    const categories = searchParams.getAll('categories');
     const exclude = searchParams.get('exclude');
+    const limit = searchParams.get('limit') || 4;
 
-    if (!category) {
-      return Response.json([]);
-    }
-
-    const excludeId = exclude && Types.ObjectId.isValid(exclude) ? new Types.ObjectId(exclude) : undefined;
+    const { db } = await getDatabase();
 
     const query = {
-      categories: { $in: [category] }
+      ...(categories?.length > 0 && { categories: { $in: categories } }),
+      ...(exclude && { _id: { $ne: exclude } })
     };
-    if (excludeId) {
-      query._id = { $ne: excludeId };
-    }
 
-    const relatedProducts = await Product.find(query)
-      .select('-__v')
-      .limit(4)
-      .lean();
+    const products = await db
+      .collection('products')
+      .find(query)
+      .limit(parseInt(limit))
+      .toArray();
 
-    return Response.json(relatedProducts);
+    return NextResponse.json(products);
   } catch (error) {
-    console.error('Error:', error);
-    return Response.json(
-      { 
-        error: 'Failed to fetch related products',
-        message: error.message
-      },
+    return NextResponse.json(
+      { error: error.message },
       { status: 500 }
     );
   }

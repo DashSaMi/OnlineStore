@@ -1,10 +1,8 @@
-//app/api/auth/[...nextauth]/route.js
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import clientPromise, { getDatabase } from '@/lib/mongodb';
 
-// Export authOptions separately
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -69,3 +67,4 @@ export const authOptions = {
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+export { authOptions };

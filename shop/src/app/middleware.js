@@ -6,7 +6,8 @@ const PUBLIC_FILE = /\.(.*)$/;
 const WHITELISTED_API_ROUTES = [
   '/api/auth/',
   '/api/health',
-  '/api/public/'
+  '/api/public/',
+  '/api/products/'
 ];
 
 export async function middleware(request) {
