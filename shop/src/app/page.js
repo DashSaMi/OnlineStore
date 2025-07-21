@@ -19,7 +19,7 @@ export default function Home() {
           <div className="absolute top-1/2 right-1/3 w-3 h-3 bg-yellow-400 rounded-full animate-pulse float" style={{animationDelay: '3s'}}></div>
         </div>
 
-        <div className="relative z-10 container mx-auto">
+        <div className="relative z-10">
           <div className="glass rounded-3xl p-8 md:p-12 magical-card">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
               به فروشگاه جادویی ما خوش آمدید
@@ -51,7 +51,7 @@ export default function Home() {
       <section className="relative py-20 px-4">
         <div className="absolute inset-0 bg-gradient-to-t from-purple-900/5 via-transparent to-pink-900/5"></div>
         
-        <div className="container mx-auto relative z-10">
+        <div className="relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               چرا ما را انتخاب کنید؟

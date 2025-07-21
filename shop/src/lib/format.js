@@ -1,8 +1,5 @@
 export function formatPrice(price) {
-  return new Intl.NumberFormat('fa-IR', {
-    style: 'currency',
-    currency: 'IRR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
+  // Convert Rial to Toman, format with commas, and append 'تومان'
+  const toman = Math.round(price / 1);
+  return toman.toLocaleString('fa-IR') + ' تومان';
 }

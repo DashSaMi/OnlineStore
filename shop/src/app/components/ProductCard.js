@@ -1,22 +1,15 @@
+///app/components/ProductCard.js
 'use client';
 import { FaStar, FaShoppingCart, FaMagic, FaCrown } from 'react-icons/fa';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 import styles from './ProductCard.module.css';
+import { formatPrice } from '@/lib/format';
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('fa-IR', {
-      style: 'currency',
-      currency: 'IRR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -121,7 +114,7 @@ export default function ProductCard({ product }) {
           ) : (
             <>
               <FaShoppingCart />
-              <span>افزودن به سبد خرید</span>
+              <span className='styles.span-buybtn'>افزودن به سبد خرید</span>
             </>
           )}
         </button>

@@ -2,6 +2,7 @@
 import ProductCard from '../components/ProductCard';
 import Link from 'next/link';
 import { FaMagic, FaBoxOpen, FaStar, FaCrown } from 'react-icons/fa';
+import styles from '../components/ProductCard.module.css';
 
 async function getProducts() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
@@ -26,7 +27,7 @@ export default async function ProductsPage() {
       return (
         <div className="min-h-screen relative py-16 px-4">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
-          <div className="container mx-auto text-center relative z-10">
+          <div className="text-center relative z-10">
             <div className="glass rounded-3xl p-12 max-w-lg mx-auto">
               <FaBoxOpen className="text-purple-400 text-6xl mx-auto mb-6 animate-pulse" />
               <h1 className="text-4xl font-bold text-white mb-6">
@@ -50,7 +51,7 @@ export default async function ProductsPage() {
         {/* Magical background overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
         
-        <div className="container mx-auto relative z-10">
+        <div className="text-center relative z-10">
           {/* Header with magical styling */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -93,21 +94,23 @@ export default async function ProductsPage() {
           </div>
           
           {/* Products grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {products.map((product, index) => (
-              <div 
-                key={product._id}
-                className="hover:scale-[1.02] transition-transform duration-500"
-                style={{animationDelay: `${index * 0.05}s`}}
-              >
-                <Link 
-                  href={`/products/${product._id}`}
-                  className="block"
+          <div className={styles.cardsContainer}>
+            <div className={styles.cardsGrid}>
+              {products.map((product, index) => (
+                <div 
+                  key={product._id}
+                  className="hover:scale-[1.02] transition-transform duration-500"
+                  style={{animationDelay: `${index * 0.05}s`}}
                 >
-                  <ProductCard product={product} />
-                </Link>
-              </div>
-            ))}
+                  <Link 
+                    href={`/products/${product._id}`}
+                    className="block"
+                  >
+                    <ProductCard product={product} />
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Bottom magical section */}
@@ -145,7 +148,7 @@ export default async function ProductsPage() {
     return (
       <div className="min-h-screen relative py-16 px-4">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
-        <div className="container mx-auto text-center relative z-10">
+        <div className="text-center relative z-10">
           <div className="glass rounded-3xl p-12 max-w-lg mx-auto">
             <FaMagic className="text-red-400 text-6xl mx-auto mb-6 animate-pulse" />
             <h1 className="text-4xl font-bold text-white mb-6">

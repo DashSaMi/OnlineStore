@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <header className="glass border-b border-white/10 py-4 px-6 sticky top-0 z-50 backdrop-blur-lg">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="flex justify-between items-center">
         {/* Logo with fixed visibility */}
         <Link href="/" className="text-2xl font-bold text-white hover:text-purple-300 transition-colors duration-300">
           فروشگاه جادویی
