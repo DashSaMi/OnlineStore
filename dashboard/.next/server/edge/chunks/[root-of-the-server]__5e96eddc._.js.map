@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 21, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.js"],"sourcesContent":["// In your API routes (port 3000), add:\r\nimport { NextResponse } from 'next/server';\r\n\r\nexport async function middleware(request) {\r\n  const response = NextResponse.next();\r\n  response.headers.set('Access-Control-Allow-Origin', '*');\r\n  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');\r\n  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');\r\n  return response;\r\n}"],"names":[],"mappings":"AAAA,uCAAuC;;;;AACvC;AAAA;;AAEO,eAAe,WAAW,OAAO;IACtC,MAAM,WAAW,6LAAA,CAAA,eAAY,CAAC,IAAI;IAClC,SAAS,OAAO,CAAC,GAAG,CAAC,+BAA+B;IACpD,SAAS,OAAO,CAAC,GAAG,CAAC,gCAAgC;IACrD,SAAS,OAAO,CAAC,GAAG,CAAC,gCAAgC;IACrD,OAAO;AACT"}}]
+}
