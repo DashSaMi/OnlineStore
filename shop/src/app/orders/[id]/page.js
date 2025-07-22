@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { formatPrice } from '@/lib/format';
 import Link from 'next/link';
+import styles from './OrderPage.module.css';
 import { 
   FaArrowRight,
   FaCheckCircle,
@@ -31,16 +32,14 @@ export default function OrderPage() {
     return status === 'complete' ? 'تکمیل شده' : 'در حال پردازش';
   };
 
-  const getStatusColor = (status) => {
-    return status === 'complete' 
-      ? 'bg-green-100 text-green-800 border-green-200' 
-      : 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  const getStatusClass = (status) => {
+    return status === 'complete' ? styles.complete : styles.processing;
   };
 
   const getStatusIcon = (status) => {
     return status === 'complete' 
-      ? <FaCheckCircle className="h-5 w-5 text-green-600" />
-      : <FaClock className="h-5 w-5 text-yellow-600" />;
+      ? <FaCheckCircle className={styles.statusIcon} />
+      : <FaClock className={styles.statusIcon} />;
   };
 
   useEffect(() => {
@@ -82,10 +81,10 @@ export default function OrderPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">در حال دریافت اطلاعات سفارش...</p>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingContent}>
+          <div className={styles.spinner}></div>
+          <p className={styles.loadingText}>در حال دریافت اطلاعات سفارش...</p>
         </div>
       </div>
     );
@@ -93,16 +92,13 @@ export default function OrderPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto text-center">
-          <FaTimes className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">خطا در دریافت سفارش</h2>
-          <p className="text-red-600 mb-6">{error}</p>
-          <Link 
-            href="/orders" 
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
-          >
-            <FaArrowRight className="h-4 w-4" />
+      <div className={styles.errorContainer}>
+        <div className={styles.errorContent}>
+          <FaTimes className={styles.errorIcon} />
+          <h2 className={styles.errorTitle}>خطا در دریافت سفارش</h2>
+          <p className={styles.errorMessage}>{error}</p>
+          <Link href="/orders" className={styles.backButton}>
+            <FaArrowRight />
             بازگشت به لیست سفارشات
           </Link>
         </div>
@@ -112,16 +108,13 @@ export default function OrderPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto text-center">
-          <FaClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">سفارش یافت نشد</h2>
-          <p className="text-gray-600 mb-6">سفارش مورد نظر وجود ندارد یا حذف شده است.</p>
-          <Link 
-            href="/orders" 
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
-          >
-            <FaArrowRight className="h-4 w-4" />
+      <div className={styles.errorContainer}>
+        <div className={styles.errorContent}>
+          <FaClipboardList className={styles.errorIcon} />
+          <h2 className={styles.errorTitle}>سفارش یافت نشد</h2>
+          <p className={styles.errorMessage}>سفارش مورد نظر وجود ندارد یا حذف شده است.</p>
+          <Link href="/orders" className={styles.backButton}>
+            <FaArrowRight />
             بازگشت به لیست سفارشات
           </Link>
         </div>
@@ -130,92 +123,83 @@ export default function OrderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={styles.container}>
+      <div className={styles.contentWrapper}>
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        <div className={styles.header}>
+          <div className={styles.headerContent}>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <FaClipboardList className="h-8 w-8 text-blue-600" />
+              <h1 className={styles.title}>
+                <FaClipboardList className={styles.titleIcon} />
                 سفارش #{order._id.substring(0, 8)}
               </h1>
-              <p className="text-gray-600 mt-2">جزئیات کامل سفارش مشتری</p>
+              <p className={styles.subtitle}>جزئیات کامل سفارش مشتری</p>
             </div>
-            <Link 
-              href="/orders" 
-              className="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              <FaArrowRight className="h-4 w-4" />
+            <Link href="/orders" className={styles.backButton}>
+              <FaArrowRight />
               بازگشت به لیست
             </Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className={styles.mainGrid}>
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div>
             {/* Order Status */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                  <FaCheckCircle className="h-5 w-5 text-blue-600" />
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <h2 className={styles.cardTitle}>
+                  <FaCheckCircle />
                   وضعیت سفارش
                 </h2>
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${getStatusColor(order.status)}`}>
+                <div className={`${styles.statusBadge} ${getStatusClass(order.status)}`}>
                   {getStatusIcon(order.status)}
-                  <span className="font-medium">{getStatusLabel(order.status)}</span>
+                  <span>{getStatusLabel(order.status)}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <FaCalendarAlt className="h-4 w-4" />
+              <div className={styles.metaInfo}>
+                <div className={styles.metaItem}>
+                  <FaCalendarAlt />
                   <span>تاریخ سفارش: {new Date(order.createdAt).toLocaleDateString('fa-IR')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FaUser className="h-4 w-4" />
+                <div className={styles.metaItem}>
+                  <FaUser />
                   <span>مشتری: {session?.user?.name || 'کاربر'}</span>
                 </div>
               </div>
             </div>
 
             {/* Products */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                <FaBoxOpen className="h-5 w-5 text-green-600" />
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>
+                <FaBoxOpen />
                 محصولات سفارش
               </h2>
-              <div className="space-y-4">
+              <div className={styles.productList}>
                 {order.items.map((item, index) => (
-                  <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="w-16 h-16 bg-white rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
+                  <div key={index} className={styles.productItem}>
+                    <div className={styles.productImage}>
                       {item.imageUrl ? (
-                        <img 
-                          src={item.imageUrl} 
-                          alt={item.name}
-                          className="w-full h-full object-contain"
-                        />
+                        <img src={item.imageUrl} alt={item.name} />
                       ) : (
-                        <FaBoxOpen className="h-6 w-6 text-gray-400" />
+                        <FaBoxOpen />
                       )}
                     </div>
-                    <div className="flex-grow">
-                      <h3 className="font-medium text-gray-900">{item.name}</h3>
-                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
-                        <span className="flex items-center gap-1">
-                          <FaDollarSign className="h-3 w-3" />
+                    <div className={styles.productInfo}>
+                      <h3 className={styles.productName}>{item.name}</h3>
+                      <div className={styles.productMeta}>
+                        <span>
+                          <FaDollarSign />
                           قیمت واحد: {formatPrice(item.price)}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <FaShoppingCart className="h-3 w-3" />
+                        <span>
+                          <FaShoppingCart />
                           تعداد: {item.quantity}
                         </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-semibold text-gray-900">
-                        {formatPrice(item.price * item.quantity)}
-                      </div>
+                    <div className={styles.productPrice}>
+                      {formatPrice(item.price * item.quantity)}
                     </div>
                   </div>
                 ))}
@@ -224,61 +208,55 @@ export default function OrderPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div>
             {/* Order Summary */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                <FaDollarSign className="h-5 w-5 text-purple-600" />
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>
+                <FaDollarSign />
                 خلاصه سفارش
               </h2>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="text-gray-600">تعداد کالاها:</span>
-                  <span className="font-medium text-gray-900">
-                    {order.items.reduce((sum, item) => sum + item.quantity, 0)} عدد
-                  </span>
+              <div>
+                <div className={styles.summaryItem}>
+                  <span>تعداد کالاها:</span>
+                  <span>{order.items.reduce((sum, item) => sum + item.quantity, 0)} عدد</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="text-gray-600">تعداد محصولات:</span>
-                  <span className="font-medium text-gray-900">
-                    {order.items.length} نوع
-                  </span>
+                <div className={styles.summaryItem}>
+                  <span>تعداد محصولات:</span>
+                  <span>{order.items.length} نوع</span>
                 </div>
-                <div className="flex justify-between items-center py-4 border-t border-gray-200">
-                  <span className="text-lg font-semibold text-gray-900">مبلغ قابل پرداخت:</span>
-                  <span className="text-2xl font-bold text-green-600">
+                <div className={styles.totalPrice}>
+                  <span className={styles.totalPriceLabel}>مبلغ قابل پرداخت:</span>
+                  <span className={styles.totalPriceValue}>
                     {formatPrice(order.totalPrice)}
                   </span>
                 </div>
               </div>
             </div>
 
-       
-
             {/* Order Timeline */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">تاریخچه سفارش</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
-                  <div>
-                    <p className="font-medium text-gray-900">سفارش ثبت شد</p>
-                    <p className="text-sm text-gray-600">{new Date(order.createdAt).toLocaleDateString('fa-IR')}</p>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>تاریخچه سفارش</h3>
+              <div className={styles.timeline}>
+                <div className={styles.timelineItem}>
+                  <div className={`${styles.timelineDot} ${styles.green}`}></div>
+                  <div className={styles.timelineContent}>
+                    <h4>سفارش ثبت شد</h4>
+                    <p>{new Date(order.createdAt).toLocaleDateString('fa-IR')}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
-                  <div>
-                    <p className="font-medium text-gray-900">در حال پردازش</p>
-                    <p className="text-sm text-gray-600">در حال بررسی سفارش</p>
+                <div className={styles.timelineItem}>
+                  <div className={`${styles.timelineDot} ${styles.blue}`}></div>
+                  <div className={styles.timelineContent}>
+                    <h4>در حال پردازش</h4>
+                    <p>در حال بررسی سفارش</p>
                   </div>
                 </div>
                 {order.status === 'complete' && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
-                    <div>
-                      <p className="font-medium text-gray-900">تکمیل شد</p>
-                      <p className="text-sm text-gray-600">سفارش با موفقیت تکمیل شد</p>
+                  <div className={styles.timelineItem}>
+                    <div className={`${styles.timelineDot} ${styles.green}`}></div>
+                    <div className={styles.timelineContent}>
+                      <h4>تکمیل شد</h4>
+                      <p>سفارش با موفقیت تکمیل شد</p>
                     </div>
                   </div>
                 )}
