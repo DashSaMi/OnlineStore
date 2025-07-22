@@ -1,0 +1,19 @@
+{
+  "app": {
+    "[project]/src/app/_not-found/page": [
+      "static/media/Dxxo8j6PP2D_kU2muijlHcWWIGroew-s.p.2c306b55.woff2",
+      "static/media/Dxxo8j6PP2D_kU2muijlGMWWIGroe7ll-s.p.104dd782.woff2"
+    ],
+    "[project]/src/app/cart/page": [
+      "static/media/Dxxo8j6PP2D_kU2muijlHcWWIGroew-s.p.2c306b55.woff2",
+      "static/media/Dxxo8j6PP2D_kU2muijlGMWWIGroe7ll-s.p.104dd782.woff2"
+    ],
+    "[project]/src/app/page": [
+      "static/media/Dxxo8j6PP2D_kU2muijlHcWWIGroew-s.p.2c306b55.woff2",
+      "static/media/Dxxo8j6PP2D_kU2muijlGMWWIGroe7ll-s.p.104dd782.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
