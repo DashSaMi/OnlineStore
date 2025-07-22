@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 21, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/middleware.js"],"sourcesContent":["// middleware.js (simplified)\r\nimport { NextResponse } from 'next/server';\r\n\r\nconst PUBLIC_FILE = /\\.(.*)$/;\r\n\r\nexport async function middleware(request) {\r\n  const { pathname } = request.nextUrl;\r\n  \r\n  // Skip static files\r\n  if (pathname.startsWith('/_next') || PUBLIC_FILE.test(pathname)) {\r\n    return NextResponse.next();\r\n  }\r\n\r\n  // No auth checks - just continue\r\n  return NextResponse.next();\r\n}\r\n\r\nexport const config = {\r\n  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],\r\n};"],"names":[],"mappings":"AAAA,6BAA6B;;;;;AAC7B;AAAA;;AAEA,MAAM,cAAc;AAEb,eAAe,WAAW,OAAO;IACtC,MAAM,EAAE,QAAQ,EAAE,GAAG,QAAQ,OAAO;IAEpC,oBAAoB;IACpB,IAAI,SAAS,UAAU,CAAC,aAAa,YAAY,IAAI,CAAC,WAAW;QAC/D,OAAO,6LAAA,CAAA,eAAY,CAAC,IAAI;IAC1B;IAEA,iCAAiC;IACjC,OAAO,6LAAA,CAAA,eAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;KAAgD;AAC5D"}}]
+}

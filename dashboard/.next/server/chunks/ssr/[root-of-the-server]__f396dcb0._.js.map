@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 6, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/saman/OneDrive/Desktop/OnlineStore/dashboard/src/app/dashboard/products/page.js"],"sourcesContent":["import SortControls from './components/SortControls';\n\nexport default function ProductsPage() {\n  return (\n    <div className=\"py-6 space-y-8\">\n      <SortControls />\n      {/* ...product grid... */}\n    </div>\n  );\n}"],"names":[],"mappings":";;;;;;;;;;;AAEe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;;;;;;;;;;AAIP","debugId":null}}]
+}
