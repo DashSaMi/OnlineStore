@@ -1,0 +1,8 @@
+{
+    "name": "onlinestore",
+    "private": true,
+    "workspaces": [
+      "OnlineStore/shop",
+      "OnlineStore/dashboard"
+    ]
+  }

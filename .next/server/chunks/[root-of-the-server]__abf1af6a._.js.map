@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 6, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 52, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/saman/OneDrive/Desktop/OnlineStore/shop/src/app/api/products/route.js"],"sourcesContent":["import { connectedToDatabase } from '@/lib/mongodb';\r\nimport Product from '@/models/product';\r\n\r\nexport async function GET() {\r\n    await connectedToDatabase();\r\n\r\n    try {\r\n        // Get best selling products (you can add sorting/filtering logic)\r\n        const products = await Product.find({ isBestSeller: true }).limit(10);\r\n        \r\n        return new Response(JSON.stringify(products), {\r\n            status: 200,\r\n            headers: {\r\n                'Content-Type': 'application/json',\r\n            },\r\n        });\r\n    } catch (error) {\r\n        return new Response(JSON.stringify({ error: error.message }), {\r\n            status: 500,\r\n            headers: {\r\n                'Content-Type': 'application/json',\r\n            },\r\n        });\r\n    }\r\n}"],"names":[],"mappings":";;;;;;;;;;;;;;;AAGO,eAAe;IAClB,MAAM;IAEN,IAAI;QACA,kEAAkE;QAClE,MAAM,WAAW,MAAM,QAAQ,IAAI,CAAC;YAAE,cAAc;QAAK,GAAG,KAAK,CAAC;QAElE,OAAO,IAAI,SAAS,KAAK,SAAS,CAAC,WAAW;YAC1C,QAAQ;YACR,SAAS;gBACL,gBAAgB;YACpB;QACJ;IACJ,EAAE,OAAO,OAAO;QACZ,OAAO,IAAI,SAAS,KAAK,SAAS,CAAC;YAAE,OAAO,MAAM,OAAO;QAAC,IAAI;YAC1D,QAAQ;YACR,SAAS;gBACL,gBAAgB;YACpB;QACJ;IACJ;AACJ","debugId":null}}]
-}
