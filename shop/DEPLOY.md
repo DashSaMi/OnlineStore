@@ -54,4 +54,3 @@ If you encounter any issues:
 1. Check Vercel deployment logs
 2. Verify environment variables are set correctly
 3. Ensure MongoDB connection string is accessible from Vercel
-4. Confirm Google OAuth credentials are properly configured 
