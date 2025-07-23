@@ -1,8 +1,8 @@
 {
-    "name": "onlinestore",
-    "private": true,
-    "workspaces": [
-      "OnlineStore/shop",
-      "OnlineStore/dashboard"
-    ]
+  "name": "onlinestore",
+  "private": true,
+  "scripts": {
+    "build:shop": "cd OnlineStore/shop && npm install && next build",
+    "build:dashboard": "cd OnlineStore/dashboard && npm install && next build"
   }
+}
