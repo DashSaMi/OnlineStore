@@ -2,7 +2,14 @@
   "name": "onlinestore",
   "private": true,
   "scripts": {
-    "build:shop": "cd OnlineStore/shop && npm install && next build",
-    "build:dashboard": "cd OnlineStore/dashboard && npm install && next build"
+    "build:shop": "cd shop && npm install && next build",
+    "build:dashboard": "cd dashboard && npm install && next build",
+    "dev:shop": "cd shop && npm run dev",
+    "dev:dashboard": "cd dashboard && npm run dev",
+    "start:shop": "cd shop && npm start",
+    "start:dashboard": "cd dashboard && npm start"
+  },
+  "devDependencies": {
+    "next": "^15.4.1"
   }
 }

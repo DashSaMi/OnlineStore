@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": {
+    "shop": "npm run build:shop",
+    "dashboard": "npm run build:dashboard"
+  },
+  "outputDirectory": {
+    "shop": "shop/.next",
+    "dashboard": "dashboard/.next"
+  }
+} 
