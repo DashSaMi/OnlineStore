@@ -22,7 +22,7 @@ function OrdersPage() {
             try {
                 const res = await fetch('http://localhost:3001/api/admin/orders', {
                     headers: {
-                        'Authorization': `Bearer ${("TURBOPACK compile-time value", "saman121213xpCrocode")}`
+                        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ADMIN_SECRET}`
                     }
                 });
                 const data = await res.json();
