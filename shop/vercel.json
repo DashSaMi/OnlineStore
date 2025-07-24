@@ -6,6 +6,7 @@
   "outputDirectory": ".next",
   "env": {
     "NEXTAUTH_URL": "https://${VERCEL_URL}",
-    "VERCEL_URL": "${VERCEL_URL}"
+    "VERCEL_URL": "${VERCEL_URL}",
+    "CI": "false"
   }
 }
