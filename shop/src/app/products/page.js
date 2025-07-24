@@ -1,7 +1,8 @@
 // app/products/page.js
 import ProductCard from '../components/ProductCard';
+import ErrorState from '../components/ErrorState';
 import Link from 'next/link';
-import { FaMagic, FaBoxOpen, FaStar, FaCrown } from 'react-icons/fa';
+import { FaBoxOpen, FaStar, FaCrown } from 'react-icons/fa';
 import styles from '../components/ProductCard.module.css';
 
 async function getProducts() {
@@ -48,11 +49,9 @@ export default async function ProductsPage() {
 
     return (
       <div className="min-h-screen relative py-16 px-4">
-        {/* Magical background overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
         
         <div className="text-center relative z-10">
-          {/* Header with magical styling */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
               <FaBoxOpen className="text-purple-400 text-3xl animate-pulse" />
@@ -63,7 +62,6 @@ export default async function ProductsPage() {
             </div>
             <p className="text-xl text-gray-300 mb-6">مجموعه کامل محصولات جادویی ما</p>
             
-            {/* Magical divider */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-16 h-1 bg-gradient-to-r from-transparent to-purple-500 rounded-full"></div>
               <FaStar className="text-purple-400 text-xl animate-pulse" />
@@ -71,7 +69,6 @@ export default async function ProductsPage() {
             </div>
           </div>
 
-          {/* Products count and stats */}
           <div className="glass rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-8">
               <div className="text-center">
@@ -93,7 +90,6 @@ export default async function ProductsPage() {
             </div>
           </div>
           
-          {/* Products grid */}
           <div className={styles.cardsContainer}>
             <div className={styles.cardsGrid}>
               {products.map((product, index) => (
@@ -113,7 +109,6 @@ export default async function ProductsPage() {
             </div>
           </div>
 
-          {/* Bottom magical section */}
           <div className="mt-16 text-center">
             <div className="glass rounded-3xl p-8 max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-gray-200 mb-6 flex items-center justify-center gap-3">
@@ -145,25 +140,6 @@ export default async function ProductsPage() {
       </div>
     );
   } catch (error) {
-    return (
-      <div className="min-h-screen relative py-16 px-4">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-cyan-900/5"></div>
-        <div className="text-center relative z-10">
-          <div className="glass rounded-3xl p-12 max-w-lg mx-auto">
-            <FaMagic className="text-red-400 text-6xl mx-auto mb-6 animate-pulse" />
-            <h1 className="text-4xl font-bold text-white mb-6">
-              همه محصولات
-            </h1>
-            <p className="text-red-400 text-lg mb-8">{error.message}</p>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105"
-            >
-              تلاش مجدد
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    return <ErrorState message={error.message} />;
   }
 }
