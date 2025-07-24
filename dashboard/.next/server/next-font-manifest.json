@@ -8,6 +8,12 @@
     ],
     "[project]/src/app/dashboard/page": [
       "static/media/06ba6ef833b337bc-s.p.0faac26c.woff2"
+    ],
+    "[project]/src/app/dashboard/products/edit/[id]/page": [
+      "static/media/06ba6ef833b337bc-s.p.0faac26c.woff2"
+    ],
+    "[project]/src/app/dashboard/products/page": [
+      "static/media/06ba6ef833b337bc-s.p.0faac26c.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

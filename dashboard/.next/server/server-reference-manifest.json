@@ -1,5 +1,16 @@
 {
   "node": {
+    "008359a29d176b09276ec8237008a8d0636a59e747": {
+      "workers": {
+        "app/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/dashboard/actions.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/dashboard/page": "rsc"
+      }
+    },
     "407ae0e74c384947af0465fee0678fe6618751424c": {
       "workers": {
         "app/dashboard/orders/[id]/page": {
@@ -20,17 +31,6 @@
       },
       "layer": {
         "app/dashboard/orders/[id]/page": "action-browser"
-      }
-    },
-    "008359a29d176b09276ec8237008a8d0636a59e747": {
-      "workers": {
-        "app/dashboard/page": {
-          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/dashboard/actions.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/dashboard/page": "rsc"
       }
     }
   },

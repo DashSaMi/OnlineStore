@@ -59,7 +59,7 @@ __turbopack_context__.s({
     "getProduct": ()=>getProduct,
     "updateProduct": ()=>updateProduct
 });
-const API_BASE_URL = ("TURBOPACK compile-time value", "http://localhost:3000") || 'http://localhost:3000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
 // Common fetch wrapper
 async function handleRequest(url, options = {}) {
     try {
