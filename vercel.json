@@ -1,13 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rootDirectory": "shop",
   "buildCommand": "npm install && npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
   "builds": [
     {
-      "src": "package.json",
+      "src": "shop/package.json",
       "use": "@vercel/next"
     }
   ]
-} 
+}
