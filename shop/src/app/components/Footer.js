@@ -4,7 +4,7 @@ import { FaEnvelope, FaMapMarkerAlt, FaFacebook, FaTwitter, FaLinkedin } from 'r
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer + ' font-vazir'}>
       <div className={styles.footerMain}>
         {/* Logo/About */}
         <div className={styles.col}>

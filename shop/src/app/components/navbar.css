@@ -145,10 +145,20 @@
   background: var(--card-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-family: var(--font-vazir), sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+
+.glass.dark {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background 0.3s, color 0.3s;
 }
 
 nav {
   transition: all 0.3s ease;
+  font-family: var(--font-vazir), sans-serif;
 }
 
 nav a, nav button {
@@ -159,6 +169,7 @@ nav a, nav button {
   align-items: center;
   gap: 0.5rem;
   border-radius: 0.375rem;
+  font-family: var(--font-vazir), sans-serif;
 }
 
 nav a:hover, nav button:hover {
@@ -176,11 +187,30 @@ nav a:hover, nav button:hover {
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-vazir), sans-serif;
+}
+
+.magical-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 0.375rem;
+}
+
+.magical-button:hover::after {
+  opacity: 1;
 }
 
 .magical-button:hover {
-  background: var(--primary);
   color: white;
+  transform: translateY(-1px);
 }
 
 .cart-button {
@@ -190,7 +220,7 @@ nav a:hover, nav button:hover {
 
 .cart-count {
   position: absolute;
-  top: -.05rem;
+  top: -0.25rem;
   right: 0;
   background: var(--error);
   color: white;
@@ -202,6 +232,100 @@ nav a:hover, nav button:hover {
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 600;
+  border: 2px solid var(--card-bg);
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.menu-toggle:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: var(--background);
+    backdrop-filter: blur(20px);
+    padding: 5rem 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .nav-menu.open {
+    right: 0;
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-menu > div {
+    width: 100%;
+  }
+
+  .nav-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .magical-button {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(var(--primary-rgb), 0.1);
+    border-radius: 0.5rem;
+  }
+
+  .magical-button:hover {
+    background: var(--primary);
+  }
+
+  .magical-button span {
+    display: inline !important;
+  }
+
+  .cart-button {
+    padding-right: 2rem;
+  }
+
+  .cart-count {
+    right: 50%;
+    margin-right: -2.5rem;
+  }
 }
 
 /* Theme toggle specific styles */
@@ -216,43 +340,4 @@ nav a:hover, nav button:hover {
 .theme-toggle:hover {
   background: var(--primary);
   color: white;
-}
-
-.nav-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-@media (max-width: 640px) {
-  nav a, nav button {
-    padding: 0.375rem 0.75rem;
-  }
-  
-  .magical-button {
-    font-size: 0.75rem;
-  }
-}
-@media (max-width: 900px) {
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100vw;
-    height: 100vh;
-    width: 70vw;
-    background: #fff;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 4rem 2rem 2rem 2rem;
-    gap: 2rem;
-    box-shadow: -2px 0 16px rgba(0,0,0,0.08);
-    z-index: 200;
-    transition: right 0.3s;
-  }
-  .nav-links.open {
-    right: 0;
-  }
-  .menu-toggle {
-    display: block;
-  }
 } 

@@ -1,17 +1,21 @@
 .container {
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding: 1rem;
   color: var(--foreground);
+  background: var(--background);
 }
 
 .contentWrapper {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .header {
   margin-bottom: 2rem;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .headerContent {
@@ -26,9 +30,15 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--foreground);
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.875rem;
+  }
 }
 
 .titleIcon {
@@ -41,6 +51,7 @@
   color: var(--foreground);
   opacity: 0.8;
   margin-top: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .backButton {
@@ -52,6 +63,7 @@
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .backButton:hover {
@@ -62,35 +74,37 @@
 .mainGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 1024px) {
   .mainGrid {
     grid-template-columns: 2fr 1fr;
+    gap: 2rem;
   }
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .cardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -111,18 +125,19 @@
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 500;
+  font-size: 0.875rem;
 }
 
 .statusBadge.complete {
-  background: rgba(var(--success), 0.2);
+  background: rgba(var(--success-rgb), 0.2);
   color: var(--success);
-  border: 1px solid rgba(var(--success), 0.4);
+  border: 1px solid rgba(var(--success-rgb), 0.4);
 }
 
 .statusBadge.processing {
-  background: rgba(var(--warning), 0.2);
+  background: rgba(var(--warning-rgb), 0.2);
   color: var(--warning);
-  border: 1px solid rgba(var(--warning), 0.4);
+  border: 1px solid rgba(var(--warning-rgb), 0.4);
 }
 
 .metaInfo {
@@ -133,6 +148,9 @@
   color: var(--foreground);
   opacity: 0.8;
   flex-wrap: wrap;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 0.5rem;
 }
 
 .metaItem {
@@ -142,31 +160,45 @@
 }
 
 .productList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
 }
 
 .productItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  background: var(--background);
+  border-radius: 0.75rem;
   transition: all 0.3s ease;
 }
 
+@media (max-width: 640px) {
+  .productItem {
+    grid-template-columns: auto 1fr;
+  }
+  
+  .productPrice {
+    grid-column: 1 / -1;
+    text-align: left;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--card-border);
+  }
+}
+
 .productItem:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-hover);
 }
 
 .productImage {
   width: 4rem;
   height: 4rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,10 +212,9 @@
 }
 
 .productInfo {
-  flex-grow: 1;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .productName {
@@ -194,11 +225,12 @@
 
 .productMeta {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   color: var(--foreground);
   opacity: 0.8;
   margin: 0;
+  font-size: 0.875rem;
 }
 
 .productMeta span {
@@ -218,18 +250,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--card-border);
   color: var(--foreground);
-  opacity: 0.8;
 }
 
 .totalPrice {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem 0;
+  border-top: 2px solid var(--card-border);
   margin-top: 1rem;
 }
 
@@ -248,20 +279,34 @@
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding: 1rem 0;
 }
 
 .timelineItem {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.timelineItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 1.5rem;
+  left: 0.3rem;
+  width: 2px;
+  height: calc(100% + 1.5rem);
+  background: var(--card-border);
 }
 
 .timelineDot {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 1rem;
+  height: 1rem;
   border-radius: 9999px;
   flex-shrink: 0;
+  border: 2px solid var(--card-bg);
+  z-index: 1;
 }
 
 .timelineDot.green {
@@ -275,12 +320,12 @@
 .timelineContent {
   flex-grow: 1;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .timelineContent h4 {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--foreground);
   margin: 0;
 }
@@ -295,16 +340,13 @@
 /* Loading State */
 .loadingContainer {
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--background);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 50;
 }
 
@@ -312,12 +354,14 @@
   text-align: center;
   padding: 2rem;
   border-radius: 1rem;
+  background: var(--card-bg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .spinner {
   width: 3rem;
   height: 3rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--card-border);
   border-bottom-color: var(--mystical-blue);
   border-radius: 50%;
   display: inline-block;
@@ -333,6 +377,7 @@
 .loadingText {
   margin-top: 1rem;
   color: var(--foreground);
+  font-weight: 500;
 }
 
 /* Error State */
@@ -341,17 +386,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
 }
 
 .errorContent {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
   padding: 2rem;
   max-width: 28rem;
-  margin: 0 1rem;
+  width: 100%;
   text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .errorIcon {

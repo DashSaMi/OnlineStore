@@ -1,10 +1,10 @@
 .footer {
-  background: #181a1b;
-  color: #e5e7eb;
+  background: var(--card-bg);
+  color: var(--foreground);
   padding: 2.5rem 1rem 1rem 1rem;
   width: 100%;
-  border-top: 1px solid #222;
-  font-family: 'Inter', 'Vazirmatn', Arial, sans-serif;
+  border-top: 1px solid var(--card-border);
+  font-family: var(--font-vazir), sans-serif;
 }
 
 .footerMain {
