@@ -1,8 +1,7 @@
 {
   "version": 2,
-  "rootDirectory": "shop",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "outputDirectory": "shop/.next",
+  "outputDirectory": ".next",
   "framework": "nextjs"
 }
