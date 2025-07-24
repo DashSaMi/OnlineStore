@@ -29,7 +29,7 @@ function OrdersPage() {
                     try {
                         const res = await fetch('http://localhost:3001/api/admin/orders', {
                             headers: {
-                                'Authorization': "Bearer ".concat(("TURBOPACK compile-time value", "saman121213xpCrocode"))
+                                'Authorization': "Bearer ".concat(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_ADMIN_SECRET)
                             }
                         });
                         const data = await res.json();

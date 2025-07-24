@@ -8,13 +8,51 @@ import Image from 'next/image';
 import { FaTrash, FaPlus, FaMinus, FaShoppingCart, FaMagic, FaCrown, FaStar, FaHeart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
   const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   const totalItems = cartItems?.reduce((sum, item) => sum + (item.quantity || 0), 0) || 0;
   const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * (item.quantity || 0)), 0) || 0;
+
+  const createOrder = async () => {
+    try {
+      setIsProcessing(true);
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cartItems.map(item => ({
+            _id: item.id,
+            name: item.name,
+            imageUrl: item.imageUrl,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          totalPrice: totalPrice
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        clearCart();
+        router.push(`/orders/${data.orderId}`);
+      } else {
+        toast.error(data.message || 'خطا در ایجاد سفارش');
+      }
+    } catch (error) {
+      toast.error('خطا در ایجاد سفارش');
+      console.error('Error creating order:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (!cartItems || cartItems.length === 0) {
     return (
@@ -173,13 +211,14 @@ export default function CartPage() {
               </div>
             </div>
 
-            <Link 
-              href="/checkout"
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-6 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 mb-4 flex items-center justify-center gap-2"
+            <button 
+              onClick={createOrder}
+              disabled={isProcessing}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-6 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 mb-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaHeart className="text-lg" />
-              <span>ادامه فرآیند خرید</span>
-            </Link>
+              <span>{isProcessing ? 'در حال پردازش...' : 'انجام فرآیند خرید'}</span>
+            </button>
             
             <button
               onClick={clearCart}
