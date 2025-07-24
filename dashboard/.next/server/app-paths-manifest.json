@@ -6,5 +6,6 @@
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/products/edit/[id]/page": "app/dashboard/products/edit/[id]/page.js",
   "/dashboard/products/page": "app/dashboard/products/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js"
 }
