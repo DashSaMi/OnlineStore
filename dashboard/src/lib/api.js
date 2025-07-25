@@ -61,7 +61,7 @@ const fetchOrders = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/orders`, {
       headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+        'Authorization': 'Bearer saman121213xpCrocode'
       },
       cache: 'no-store'
     });
@@ -90,7 +90,7 @@ const createProduct = async (productData) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+         'Authorization': 'Bearer saman121213xpCrocode'
       },
       body: JSON.stringify(productData)
     });
@@ -120,7 +120,7 @@ const updateProduct = async (id, productData) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+       'Authorization': 'Bearer saman121213xpCrocode'
       },
       body: JSON.stringify(productData)
     });
@@ -148,7 +148,7 @@ const deleteProduct = async (id) => {
     const response = await fetch(`${API_BASE_URL}/admin/products/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+         'Authorization': 'Bearer saman121213xpCrocode'
       }
     });
     

@@ -19,7 +19,7 @@ export async function GET(request) {
 
     const response = await fetch(mainAppUrl, {
       headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET || 'your_fallback_secret'}`,
+       'Authorization': 'Bearer saman121213xpCrocode',
         'Content-Type': 'application/json'
       },
       cache: 'no-store'

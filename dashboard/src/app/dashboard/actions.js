@@ -8,7 +8,7 @@ export async function fetchOrdersServer() {
     const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+        'Authorization': 'Bearer saman121213xpCrocode'
       },
       cache: 'no-store'
     });

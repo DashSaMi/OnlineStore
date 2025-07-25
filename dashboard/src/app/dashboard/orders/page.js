@@ -14,7 +14,7 @@ export default function OrdersPage() {
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
         const res = await fetch(`${API_BASE_URL}/api/admin/orders`, {
           headers: {
-            'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
+             'Authorization': 'Bearer saman121213xpCrocode'
           }
         });
         const data = await res.json();
