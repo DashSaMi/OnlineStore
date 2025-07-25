@@ -1,20 +1,25 @@
-//app/api/admin/orders/route.js 
+// app/api/admin/orders/route.js
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request) {
   try {
-    const mainAppUrl = new URL(`${process.env.NEXTAUTH_URL}/api/orders`);
-    const { searchParams } = new URL(request.url)
+    // Use direct URL or fallback to environment variable
+    const baseUrl = 'https://onlineshop-rose-six.vercel.app' || process.env.NEXTAUTH_URL;
+    const mainAppUrl = new URL(`${baseUrl}/api/orders`);
     
+    // Copy query parameters
+    const { searchParams } = new URL(request.url)
     searchParams.forEach((value, key) => {
       mainAppUrl.searchParams.append(key, value)
     })
 
+    console.log('Fetching from:', mainAppUrl.toString()); // Debug log
+
     const response = await fetch(mainAppUrl, {
       headers: {
-        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`,
+        'Authorization': `Bearer ${process.env.ADMIN_SECRET || 'your_fallback_secret'}`,
         'Content-Type': 'application/json'
       },
       cache: 'no-store'
@@ -27,7 +32,6 @@ export async function GET(request) {
 
     const data = await response.json()
     
-    // Standardize the response format
     return NextResponse.json({
       success: true,
       data: data.orders || data.data || [],
