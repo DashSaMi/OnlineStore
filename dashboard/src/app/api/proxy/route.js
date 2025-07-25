@@ -1,6 +1,6 @@
 export async function GET(request) {
   try {
-    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), 'http://localhost:3000');
+    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), `{process.env.BASE_URL}`);
     
     // Forward all query parameters
     request.nextUrl.searchParams.forEach((value, key) => {
@@ -44,7 +44,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), 'http://localhost:3000');
+    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), `${process.env.BASE_URL}`);
     const body = await request.json();
 
     const response = await fetch(apiUrl, {

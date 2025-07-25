@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ProductDeleteButton from './components/ProductDeleteButton';
 
 const PAGE_SIZE = 6;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function ProductsPage({ searchParams }) {
   let products = [];
@@ -15,7 +16,7 @@ export default async function ProductsPage({ searchParams }) {
   let totalPages = 1;
 
   try {
-    const res = await fetch(`http://localhost:3000/api/products?sort=${sort}&order=${order}&limit=${PAGE_SIZE}&page=${page}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE_URL}/api/products?sort=${sort}&order=${order}&limit=${PAGE_SIZE}&page=${page}`, { cache: 'no-store' });
     if (!res.ok) {
       throw new Error(`Failed to fetch products: ${res.status}`);
     }

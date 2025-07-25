@@ -10,7 +10,8 @@ export default function ProductDeleteButton({ productId }) {
     if (!confirm('Are you sure you want to delete this product?')) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3000/api/products?id=${productId}`, {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const res = await fetch(`${API_BASE_URL}/api/products?id=${productId}`, {
         method: 'DELETE',
       });
       if (!res.ok) {

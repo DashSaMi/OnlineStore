@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request) {
   try {
-    const mainAppUrl = new URL('http://localhost:3000/api/orders')
+    const mainAppUrl = new URL(`${process.env.BASE_URL}/api/orders`);
     const { searchParams } = new URL(request.url)
     
     searchParams.forEach((value, key) => {

@@ -11,7 +11,8 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/admin/orders', {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const res = await fetch(`${API_BASE_URL}/api/admin/orders`, {
           headers: {
             'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ADMIN_SECRET}`
           }

@@ -1,9 +1,11 @@
 // src/app/dashboard/actions.js
 'use server';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export async function fetchOrdersServer() {
   try {
-    const response = await fetch('http://localhost:3001/api/admin/orders', {
+    const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.ADMIN_SECRET}`

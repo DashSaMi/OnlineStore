@@ -12,9 +12,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-validate.js [app-rsc] (ecmascript)");
 ;
 ;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 async function fetchOrdersServer() {
     try {
-        const response = await fetch('http://localhost:3001/api/admin/orders', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
