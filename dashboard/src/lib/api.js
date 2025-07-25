@@ -1,5 +1,5 @@
 //src/lib/api.js
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = process.env.NEXTAUTH_URL;
 
 /**
  * Fetches all products from the API
@@ -90,7 +90,7 @@ const createProduct = async (productData) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ADMIN_SECRET}`
+        'Authorization': `Bearer ${process.env.ADMIN_SECRET}`
       },
       body: JSON.stringify(productData)
     });
