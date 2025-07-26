@@ -61,7 +61,7 @@ export async function middleware(request) {
 
     // Handle admin API requests
     const authHeader = request.headers.get('authorization');
-    const adminSecret = process.env.ADMIN_SECRET;
+    const adminSecret = 'saman121213xpCrocode';
     
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
