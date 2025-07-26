@@ -10,7 +10,7 @@ export default function ProductDeleteButton({ productId }) {
     if (!confirm('Are you sure you want to delete this product?')) return;
     setLoading(true);
     try {
-      const API_BASE_URL = process.env.NEXTAUTH_URL;
+      const API_BASE_URL = 'https://onlineshop-rose-six.vercel.app';
       const res = await fetch(`${API_BASE_URL}/api/products?id=${productId}`, {
         method: 'DELETE',
       });

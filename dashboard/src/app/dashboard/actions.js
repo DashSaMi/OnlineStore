@@ -1,6 +1,6 @@
 'use server';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = 'https://onlinestoredashbaord.vercel.app';
 
 export async function fetchOrdersServer() {
   if (!process.env.ADMIN_SECRET) {

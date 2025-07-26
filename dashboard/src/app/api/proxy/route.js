@@ -1,6 +1,6 @@
 export async function GET(request) {
   try {
-    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), `{process.env.NEXTAUTH_URL}`);
+    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), 'https://onlineshop-rose-six.vercel.app');
     
     // Forward all query parameters
     request.nextUrl.searchParams.forEach((value, key) => {
@@ -44,7 +44,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), `${process.env.NEXTAUTH_URL}`);
+    const apiUrl = new URL(request.nextUrl.pathname.replace('/api/proxy', ''), 'https://onlineshop-rose-six.vercel.app');
     const body = await request.json();
 
     const response = await fetch(apiUrl, {

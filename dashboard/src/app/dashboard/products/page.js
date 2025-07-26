@@ -3,7 +3,7 @@ import Link from 'next/link';
 import ProductDeleteButton from './components/ProductDeleteButton';
 
 const PAGE_SIZE = 6;
-const API_BASE_URL = process.env.NEXTAUTH_URL;
+const API_BASE_URL = 'https://onlineshop-rose-six.vercel.app/';
 
 export default async function ProductsPage({ searchParams }) {
   let products = [];

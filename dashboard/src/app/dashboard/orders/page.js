@@ -11,7 +11,7 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const API_BASE_URL = 'https://onlinestoredashbaord.vercel.app';
         const res = await fetch(`${API_BASE_URL}/api/admin/orders`, {
           headers: {
              'Authorization': 'Bearer saman121213xpCrocode'

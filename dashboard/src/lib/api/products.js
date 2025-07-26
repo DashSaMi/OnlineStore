@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXTAUTH_URL;
+const API_BASE_URL = 'https://onlineshop-rose-six.vercel.app';
 
 // Common fetch wrapper
 async function handleRequest(url, options = {}) {
