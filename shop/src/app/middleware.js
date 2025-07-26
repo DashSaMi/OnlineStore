@@ -32,9 +32,14 @@ export async function middleware(request) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   // CORS configuration - allow both ports in development
-  const allowedOrigins = process.env.NODE_ENV === 'development' 
+  const allowedOrigins =
+  process.env.NODE_ENV === 'development'
     ? ['http://localhost:3000', 'http://localhost:3001']
-    : [process.env.NEXT_PUBLIC_BASE_URL];
+    : [
+        'https://onlineshop-rose-six.vercel.app',
+        'https://onlinestoredashbaord.vercel.app',
+      ];
+
   
   const requestOrigin = request.headers.get('origin');
   if (allowedOrigins.includes(requestOrigin)) {

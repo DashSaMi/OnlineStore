@@ -18,7 +18,7 @@ export const authOptions = {
     }),
   ],
   adapter: MongoDBAdapter(clientPromise),
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: '7f3a9b4c2d8e1f5b6a0c3d7e9f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9',
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
